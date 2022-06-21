@@ -1,6 +1,4 @@
 import Head from "next/head";
-import Nav from "./nav";
-import { Box, Container } from "@mui/material";
 
 export default function Layout({ children, metaTags }) {
   return (

@@ -1,65 +1,35 @@
-import * as React from "react";
-import { memo, useEffect, useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
-import Link from "next/link";
-import SearchComponent from "./search";
-import { useRouter } from "next/router";
-import fetcher from "../utils/fetcher";
-import useSWR from "swr";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { Fragment, memo, useEffect, useState } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { UserCircleIcon } from "@heroicons/react/solid";
 import {
-  Avatar,
-  Button,
-  Container,
-  Divider,
-  IconButton,
-  ListItemIcon,
-  Tooltip,
-} from "@mui/material";
-import { Logout, Person, Save } from "@mui/icons-material";
+  DuplicateIcon,
+  ExternalLinkIcon,
+  IdentificationIcon,
+  LinkIcon,
+  LogoutIcon,
+  MenuIcon,
+  SearchIcon,
+  XIcon,
+} from "@heroicons/react/outline";
 import Image from "next/image";
 import { useWallet } from "@solana/wallet-adapter-react";
-import bs58 from "bs58";
-import { grey } from "@mui/material/colors";
-import { styled } from "@mui/material/styles";
-import Badge from "@mui/material/Badge";
-import MaterialLink from "@mui/material/Link";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+import { signIn, signOut, useSession } from "next-auth/react";
+import bs58 from "bs58";
+import fetcher from "../utils/fetcher";
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    backgroundColor: "#44b700",
-    color: "#44b700",
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    "&::after": {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      borderRadius: "50%",
-      animation: "ripple 1.2s infinite ease-in-out",
-      border: "1px solid currentColor",
-      content: '""',
-    },
-  },
-  "@keyframes ripple": {
-    "0%": {
-      transform: "scale(.8)",
-      opacity: 1,
-    },
-    "100%": {
-      transform: "scale(2.4)",
-      opacity: 0,
-    },
-  },
-}));
+const Search = dynamic(() => import("./search"));
+
+function classNames(...classes: any) {
+  return classes.filter(Boolean).join(" ");
+}
 
 function Nav() {
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const { data = [], error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/programs/latest`,
     fetcher
@@ -99,154 +69,236 @@ function Nav() {
   };
 
   return (
-    <AppBar
-      position="static"
-      color="primary"
-      sx={{
-        boxShadow: 0,
-        borderBottomStyle: "solid",
-        borderBottomWidth: 1,
-        borderBottomColor: grey["300"],
-        borderTopWidth: 4,
-        borderTopStyle: "solid",
-        borderTopColor: "#FC6600",
-      }}
-    >
-      <Container>
-        <Toolbar
-          sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box sx={{ display: "flex" }}>
-            <Link passHref href={"/"}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer",
-                  marginRight: 5,
-                }}
-              >
-                <Image alt="" src="/logo.png" width="115px" height="37px" />
-              </Box>
-            </Link>
-          </Box>
+    <>
+      <Disclosure as="nav" className="bg-gray-900">
+        {({ open }) => (
+          <>
+            <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
+              <div className="relative flex h-16 items-center justify-between">
+                <div className="flex items-center gap-4 px-2 lg:px-0">
+                  {/* Logo */}
+                  <Link href="/">
+                    <div className="flex">
+                      <Image alt="" src="/logo.png" width="120px" height="40px" />
+                    </div>
+                  </Link>
+                </div>
 
-          {pathname !== "/" && <SearchComponent data={data} />}
+                {/* Search */}
+                {pathname !== "/" && (
+                  <div className="hidden justify-center gap-2 lg:flex">
+                    <div className="relative w-96">
+                      <button
+                        onClick={() => setShowSearch(true)}
+                        className="shadow-xs flex h-12 w-full cursor-text items-center
+                justify-between rounded-md border border-gray-700 bg-gray-700 px-5  shadow focus:outline-none"
+                      >
+                        <div className="flex flex-row items-center gap-2 text-gray-500">
+                          <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                          <span className="text-gray-400">Search by name or address</span>
+                        </div>
+                        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+                          <kbd className="inline-flex items-center rounded border border-gray-500 px-2 font-sans text-sm font-medium text-gray-400">
+                            ⌘K
+                          </kbd>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                )}
 
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2.5,
-            }}
-          >
-            <MaterialLink
-              href="https://book.anchor-lang.com/"
-              target="_blank"
-              rel="noreferrer"
-              color="secondary"
-              variant="h6"
-              sx={{
-                textDecoration: "none !important",
-              }}
-            >
-              Docs
-            </MaterialLink>
-
-            {status === "unauthenticated" && (
-              <Button variant="contained" color="secondary" onClick={() => setVisible(true)}>
-                Login with Wallet
-              </Button>
-            )}
-
-            {status === "authenticated" && (
-              <>
-                <Tooltip title="Account">
-                  <IconButton
-                    onClick={handleClick}
-                    size="large"
-                    aria-controls={open ? "account-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
+                {/* Actions */}
+                <div className="flex flex-row items-center gap-8">
+                  <Link
+                    className="flex items-center gap-1 font-semibold text-gray-50 hover:text-gray-100"
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://anchor-lang.com?utm_source=apr.dev"
                   >
-                    <StyledBadge
-                      overlap="circular"
-                      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                      variant="dot"
-                    >
-                      <Avatar sx={{ width: 30, height: 30 }} />
-                    </StyledBadge>
-                  </IconButton>
-                </Tooltip>
-
-                <Menu
-                  anchorEl={anchorEl}
-                  id="account-menu"
-                  open={open}
-                  onClose={handleClose}
-                  onClick={handleClose}
-                  PaperProps={{
-                    elevation: 0,
-                    sx: {
-                      overflow: "visible",
-                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                      mt: 1.5,
-                      "& .MuiAvatar-root": {
-                        width: 32,
-                        height: 32,
-                        ml: -0.5,
-                        mr: 1,
-                      },
-                      "&:before": {
-                        content: '""',
-                        display: "block",
-                        position: "absolute",
-                        top: 0,
-                        right: 14,
-                        width: 10,
-                        height: 10,
-                        bgcolor: "background.paper",
-                        transform: "translateY(-50%) rotate(45deg)",
-                        zIndex: 0,
-                      },
-                    },
-                  }}
-                  transformOrigin={{ horizontal: "right", vertical: "top" }}
-                  anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-                >
-                  <Link href="/account" passHref>
-                    <MenuItem sx={{ fontSize: 17, fontWeight: 500 }}>
-                      <ListItemIcon>
-                        <Person />
-                      </ListItemIcon>
-                      Profile
-                    </MenuItem>
+                    Docs
+                    <ExternalLinkIcon className="h-5 w-5" aria-hidden="true" />
                   </Link>
 
-                  <MenuItem disabled sx={{ fontSize: 17, fontWeight: 500 }}>
-                    <ListItemIcon>
-                      <Save />
-                    </ListItemIcon>
-                    Programs
-                  </MenuItem>
-                  <Divider />
-                  <MenuItem sx={{ fontSize: 17, fontWeight: 500 }} onClick={() => signOut()}>
-                    <ListItemIcon>
-                      <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                  </MenuItem>
-                </Menu>
-              </>
-            )}
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+                  {/* Wallet not connected  */}
+                  {status === "unauthenticated" && (
+                    <button
+                      type="button"
+                      className="flex flex-row items-center gap-1 rounded-md border-0 bg-gradient-to-r from-teal-500 to-blue-500 px-4 py-2 text-sm font-medium tracking-wide text-gray-50 shadow-sm"
+                      onClick={() => setVisible(true)}
+                    >
+                      <LinkIcon className="h-4 w-4" />
+                      Login with Wallet
+                    </button>
+                  )}
+
+                  {/* Wallet Connected desktop */}
+                  {status === "authenticated" && (
+                    <div className="hidden lg:block">
+                      <div className="flex items-center">
+                        {/* Auth or Profile */}
+                        <Menu as="div" className="relative z-20 flex-shrink-0">
+                          <div>
+                            <Menu.Button className="flex cursor-pointer border-0 bg-gray-900">
+                              <span className="sr-only">Open user menu</span>
+                              <UserCircleIcon className="h-8 w-8 text-gray-100" />
+                            </Menu.Button>
+                          </div>
+                          <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-100"
+                            enterFrom="transform opacity-0 scale-95"
+                            enterTo="transform opacity-100 scale-100"
+                            leave="transition ease-in duration-75"
+                            leaveFrom="transform opacity-100 scale-100"
+                            leaveTo="transform opacity-0 scale-95"
+                          >
+                            <Menu.Items
+                              className="absolute right-0 mt-2
+                        w-48 origin-top-right rounded-md bg-gray-50 py-1
+                        shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                            >
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <div className="flex flex-col border-b px-3 py-2">
+                                    <span>Connected as</span>
+                                    <span className="font-bold">
+                                      {publicKey && (
+                                        <>
+                                          {publicKey.toBase58().slice(0, 6)}...
+                                          {publicKey.toBase58().slice(-4)}
+                                        </>
+                                      )}
+                                    </span>
+                                  </div>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <Link
+                                    href="/account"
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block flex w-full flex-row gap-2 px-4 py-2 text-sm text-gray-900"
+                                    )}
+                                  >
+                                    <IdentificationIcon className="h-5 w-5" />
+                                    My Account
+                                  </Link>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <button
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block flex w-full flex-row gap-2 px-4 py-2 text-sm text-gray-900"
+                                    )}
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(publicKey.toBase58());
+                                    }}
+                                  >
+                                    <DuplicateIcon className="h-5 w-5" />
+                                    Copy Address
+                                  </button>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <button
+                                    onClick={() => signOut()}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block flex w-full flex-row gap-2 border-t px-4 py-2 text-sm text-gray-900"
+                                    )}
+                                  >
+                                    <LogoutIcon className="h-5 w-5" />
+                                    Disconnect
+                                  </button>
+                                )}
+                              </Menu.Item>
+                            </Menu.Items>
+                          </Transition>
+                        </Menu>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Mobile menu button */}
+                  <div className="flex lg:hidden">
+                    <Disclosure.Button
+                      className="inline-flex items-center
+                justify-center rounded-md p-2 text-gray-100 hover:bg-gray-700
+                hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                    >
+                      <span className="sr-only">Open main menu</span>
+                      {open ? (
+                        <XIcon className="block h-6 w-6" aria-hidden="true" />
+                      ) : (
+                        <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                      )}
+                    </Disclosure.Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Disclosure.Panel className="lg:hidden">
+              {/* Connected menu, mobile version */}
+              {status === "authenticated" && (
+                <div className="mt-3 space-y-1">
+                  <Disclosure.Button className="ml-3 block w-full text-left">
+                    <div className="flex flex-col tracking-wide">
+                      <span className="text-sm text-gray-300">Connected as</span>
+                      <span className="text-gray-50">
+                        {publicKey && (
+                          <>
+                            {publicKey.toBase58().slice(0, 6)}...
+                            {publicKey.toBase58().slice(-4)}
+                          </>
+                        )}
+                      </span>
+                    </div>
+                  </Disclosure.Button>
+
+                  <Disclosure.Button
+                    className="block flex w-full items-center rounded-md
+                   p-2 text-left
+                     text-base font-medium text-gray-100 hover:bg-gray-700 hover:text-gray-50"
+                  >
+                    <Link href="/account" className="flex gap-3 text-gray-100">
+                      <IdentificationIcon className="h-5 w-5" />
+                      My Account
+                    </Link>
+                  </Disclosure.Button>
+
+                  <Disclosure.Button
+                    className="block flex w-full items-center gap-3 rounded-md
+                    p-2 text-left text-base
+                     font-medium text-gray-100 hover:bg-gray-700 hover:text-gray-50"
+                    onClick={() => {
+                      navigator.clipboard.writeText(publicKey.toBase58());
+                    }}
+                  >
+                    <DuplicateIcon className="h-5 w-5" />
+                    Copy Address
+                  </Disclosure.Button>
+                  <Disclosure.Button
+                    className="block flex w-full items-center gap-3 rounded-md
+                    p-2 text-left text-base
+                     font-medium text-gray-100 hover:bg-gray-700 hover:text-gray-50"
+                    onClick={() => signOut()}
+                  >
+                    <LogoutIcon className="h-5 w-5" />
+                    Disconnect
+                  </Disclosure.Button>
+                </div>
+              )}
+            </Disclosure.Panel>
+          </>
+        )}
+      </Disclosure>
+      {showSearch && <Search open={showSearch} setOpen={setShowSearch} programs={data} />}
+    </>
   );
 }
 

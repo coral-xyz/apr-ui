@@ -10,6 +10,9 @@ module.exports = withPlausibleProxy()({
   },
   reactStrictMode: true,
   swcMinify: true,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
     domains: [],
     formats: ["image/avif", "image/webp"],

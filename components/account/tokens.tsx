@@ -106,18 +106,15 @@ function Tokens() {
             variant="filled"
             size="small"
             value={accessTokenName}
-            sx={{ height: 50 }}
+            sx={{ height: 20 }}
             onChange={(e) => setAccessTokenName(e.target.value)}
           />
-          <Button
+          <button
             onClick={() => generateNewTokenOnClick()}
-            color="secondary"
-            disableElevation
-            variant="contained"
-            sx={{ height: 50 }}
+            className="rounded-md bg-gray-900 py-3 px-5 text-sm uppercase text-gray-100"
           >
             Generate new Access Token
-          </Button>
+          </button>
         </Box>
       </Box>
 

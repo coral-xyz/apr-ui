@@ -3,10 +3,11 @@ import { Chip } from "@mui/material";
 import ReportIcon from "@mui/icons-material/Report";
 import DangerousIcon from "@mui/icons-material/Dangerous";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { memo } from "react";
 
-export default function Status({ buildStatus }: StatusProps) {
+function Status({ buildStatus }: StatusProps) {
   return (
-    <>
+    <div>
       {buildStatus === "verified" && (
         <Chip
           variant="filled"
@@ -40,10 +41,12 @@ export default function Status({ buildStatus }: StatusProps) {
           icon={<AutorenewIcon />}
         />
       )}
-    </>
+    </div>
   );
 }
 
 interface StatusProps {
   buildStatus: string;
 }
+
+export default memo(Status);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/layout";
-import { Alert, AlertTitle, Box, Button, Grid, TextField } from "@mui/material";
+import { Alert, AlertTitle, Box, Grid, TextField } from "@mui/material";
 import fetch from "isomorphic-unfetch";
 import useAuth from "../hooks/useAuth";
 import fetcher from "../utils/fetcher";
@@ -53,16 +53,14 @@ export default function Account() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <Button
-              variant="contained"
-              size="large"
-              color="warning"
-              disableElevation
+            <button
+              className="text-md rounded-md bg-orange-400/90 px-5 py-3 font-medium uppercase tracking-wide text-gray-700
+               disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
               disabled={username === user?.username}
               onClick={handleUpdateUsername}
             >
               Update Username
-            </Button>
+            </button>
           </Box>
         </Grid>
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>

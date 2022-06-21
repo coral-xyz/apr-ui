@@ -16,7 +16,6 @@ import useSWR from "swr";
 import fetcher from "../../utils/fetcher";
 import dynamic from "next/dynamic";
 
-const Metadata = dynamic(() => import("./metadata"));
 const Readme = dynamic(() => import("./readme"));
 const Builds = dynamic(() => import("./builds"));
 const IdlViewer = dynamic(() => import("./idl-viewer"), { ssr: false });
@@ -98,24 +97,20 @@ function ProgramTabs({
           </TabList>
         </Box>
 
-        {/* Readme visibily only if README.md present */}
+        {/* Readme visible only if README.md present */}
 
         <TabPanel value="1" sx={{ padding: 0 }}>
-          <Grid container>
-            <Grid item xs={8} sx={{ overflow: "auto", paddingTop: 2 }}>
-              {readme && <Readme readme={readme} />}
-            </Grid>
+          <Grid item sx={{ overflow: "auto", paddingTop: 2 }}>
+            {readme && <Readme readme={readme} />}
+          </Grid>
 
-            <Grid item xs={4} sx={{ paddingLeft: 2, paddingTop: 2 }}>
-              <Paper
-                elevation={0}
-                sx={{
-                  padding: 3,
-                }}
-              >
-                <Metadata data={selectedBuild} />
-              </Paper>
-            </Grid>
+          <Grid item xs={4} sx={{ paddingLeft: 2, paddingTop: 2 }}>
+            <Paper
+              elevation={0}
+              sx={{
+                padding: 3,
+              }}
+            ></Paper>
           </Grid>
         </TabPanel>
 

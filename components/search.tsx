@@ -1,95 +1,106 @@
-import { memo } from "react";
-import { alpha, styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import Box from "@mui/material/Box";
-import SearchIcon from "@mui/icons-material/Search";
-import { Autocomplete, InputAdornment } from "@mui/material";
-import { useRouter } from "next/router";
+import { Fragment, useState } from "react";
+import { UsersIcon } from "@heroicons/react/outline";
+import { Combobox, Dialog, Transition } from "@headlessui/react";
+import { FilterIcon } from "@heroicons/react/solid";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.primary.dark, 0.25),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.primary.dark, 0.3),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
+export default function Search({ programs, open, setOpen }: ProgramsProps) {
+  const [query, setQuery] = useState("");
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  "& .MuiInputBase-input": {
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "50ch",
-    },
-  },
-}));
-
-function SearchComponent({ height = 1, data }: SearchComponentProps) {
-  const router = useRouter();
+  const filteredPrograms =
+    query === ""
+      ? []
+      : programs.filter((program) => {
+          if (program.name.toLowerCase().includes(query.toLowerCase())) {
+            return true;
+          } else if (program.address.toLowerCase().includes(query.toLowerCase())) {
+            return true;
+          }
+          return false;
+        });
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Search>
-        <Autocomplete
-          freeSolo
-          id="search"
-          onChange={(event: any, newValue: string | null) => {
-            const address = newValue.split("- ")[1];
-            router.push(`/program/${address}`);
-          }}
-          options={data.map(
-            (option: any) => `${option.name} - ${option.address}`
-          )}
-          renderInput={(params) => {
-            return (
-              <StyledInputBase
-                {...params.InputProps}
-                sx={{
-                  paddingTop: height,
-                  paddingBottom: 1,
-                  width: 500,
-                }}
-                placeholder="Search for programs or apps"
-                {...params}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <SearchIconWrapper>
-                      <SearchIcon />
-                    </SearchIconWrapper>
-                  </InputAdornment>
-                }
-              />
-            );
-          }}
-        />
-      </Search>
-    </Box>
+    <Transition.Root show={open} as={Fragment} afterLeave={() => setQuery("")} appear>
+      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-25 transition-opacity" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <Dialog.Panel className="mx-auto max-w-xl transform rounded-xl bg-white p-2 shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
+              <Combobox onChange={(program) => (window.location = `/program/${program.address}`)}>
+                <Combobox.Input
+                  className="w-full rounded-md border-0 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
+                  placeholder="Search by name or address"
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+
+                {filteredPrograms.length > 0 && (
+                  <Combobox.Options
+                    static
+                    className="-mb-2 max-h-72 scroll-py-2 overflow-y-auto py-2 text-sm text-gray-800"
+                  >
+                    {filteredPrograms.map((program) => (
+                      <Combobox.Option
+                        key={program.id}
+                        value={program}
+                        className={({ active }) =>
+                          classNames(
+                            "cursor-default select-none rounded-md px-4 py-2",
+                            active && "bg-indigo-600 text-gray-50"
+                          )
+                        }
+                      >
+                        <div className="flex flex-col gap-1">
+                          <span className="text-lg font-semibold tracking-wide">
+                            {program.name}
+                          </span>
+                          <span className="tracking-wide">{program.address}</span>
+                        </div>
+                      </Combobox.Option>
+                    ))}
+                  </Combobox.Options>
+                )}
+
+                {query !== "" && filteredPrograms.length === 0 && (
+                  <div className="py-14 px-4 text-center sm:px-14">
+                    <FilterIcon className="mx-auto h-6 w-6 text-gray-400" aria-hidden="true" />
+                    <p className="mt-4 text-sm text-gray-900">
+                      No programs found using that search term.
+                    </p>
+                  </div>
+                )}
+              </Combobox>
+            </Dialog.Panel>
+          </Transition.Child>
+        </div>
+      </Dialog>
+    </Transition.Root>
   );
 }
 
-interface SearchComponentProps {
-  data: object[];
-  height?: number;
+interface ProgramsProps {
+  programs: any[];
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
-
-export default memo(SearchComponent);

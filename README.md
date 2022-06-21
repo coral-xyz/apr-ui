@@ -15,7 +15,7 @@
 
 ## Public Roadmap
 
-- https://github.com/orgs/200ms-labs/projects/1
+- https://github.com/orgs/coral-xyz/projects/1
 
 ## Getting Started
 
@@ -27,6 +27,9 @@
 ### `NEXT_PUBLIC_API_ENDPOINT` env var
 
 Ask @italoacasas or @armaniferrante in Discord or Twitter.
+
+## TailwindCSS & Material UI
+All new components should use TailwindCSS and not Material UI. The goal is to remove Material UI from the project.
 
 ## APR API
 

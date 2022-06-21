@@ -1,16 +1,14 @@
 import type { GetStaticProps } from "next";
-import { Button, Grid } from "@mui/material";
 import Image from "next/image";
-import Box from "@mui/material/Box";
 import fetch from "../utils/fetcher";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import loadMorePrograms from "../utils/loadMorePrograms";
 import dynamic from "next/dynamic";
 import Layout from "../components/layout";
 import buildStatus from "../utils/build-status";
+import { SearchIcon } from "@heroicons/react/outline";
 
-const SearchComponent = dynamic(() => import("../components/search"));
+const Search = dynamic(() => import("../components/search"));
 
 export async function getStaticProps({}: GetStaticProps) {
   const builds = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/builds/latest`);
@@ -67,6 +65,7 @@ export async function getStaticProps({}: GetStaticProps) {
 }
 
 export default function Home({ justUpdated, newPrograms }: HomeProps) {
+  const [open, setOpen] = useState(false);
   const [newProgramsSize, setNewProgramsSize] = useState(10);
   const [justUpdatedSize, setJustUpdatedSize] = useState(10);
 
@@ -77,124 +76,65 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
   };
 
   return (
-    <Layout metaTags={metaTags}>
-      <Grid
-        container
-        spacing={2}
-        sx={{ maxWidth: "xl", margin: "auto" }}
-        direction="row"
-        justifyContent="space-around"
-      >
-        {/* Search */}
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: 15,
-            marginTop: 5,
-            gap: 4,
-          }}
-        >
-          <Box>
-            <Image alt="" src="/banner-text.png" width="400px" height="268px" />
-          </Box>
+    <>
+      <Layout metaTags={metaTags}>
+        <div className="mx-auto flex flex-col justify-around">
+          <div className="mx-auto mb-20 mt-10 flex flex-col gap-4">
+            <div className="mx-auto">
+              <Image alt="" className="" src="/banner-text.png" width="400px" height="268px" />
+            </div>
 
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-            }}
-          >
-            {/* Search input */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                paddingBottom: 4,
-                paddingLeft: 2,
-              }}
-            >
-              <SearchComponent data={newPrograms} height={2} />
-              <Typography variant="subtitle2" component="p" sx={{ fontSize: 15 }}>
-                Tip: Search for programs or app using the program name or address.
-              </Typography>
-            </Box>
+            {/* Search */}
+            <div className="relative mt-1 w-96 xl:w-[600px]">
+              <button
+                onClick={() => setOpen(true)}
+                className="shadow-xs flex h-14 w-full cursor-text items-center
+                justify-between rounded-md border border-gray-100 bg-gray-100 px-5 font-medium shadow focus:outline-none"
+              >
+                <div className="flex flex-row items-center gap-2 text-gray-500">
+                  <SearchIcon className="h-5 w-5" />
+                  <span className="">Search by name or address</span>
+                </div>
+                <kbd className="inline-flex items-center rounded border border-gray-200 px-2 font-sans text-sm font-medium text-gray-500">
+                  ⌘K
+                </kbd>
+              </button>
+            </div>
+          </div>
 
-            {/* Search btn */}
-            <Button
-              color="secondary"
-              variant="contained"
-              disableElevation
-              size="large"
-              sx={{ height: 55, width: 200 }}
-            >
-              <Typography variant="button" color="primary">
-                Search
-              </Typography>
-            </Button>
-          </Box>
-        </Grid>
-        {/* New Programs List */}
-        <Grid
-          item
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            paddingBottom: 5,
-            gap: 2,
-          }}
-        >
-          <Typography variant="h6" component="h2">
-            New Programs
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            {loadMorePrograms(newPrograms, newProgramsSize)}
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ width: 400 }}
-              onClick={() => setNewProgramsSize(newProgramsSize + 10)}
-            >
-              View More
-            </Button>
-          </Box>
-        </Grid>
-        {/* Just Updated List */}
-        <Grid
-          item
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            paddingBottom: 5,
-            gap: 2,
-          }}
-        >
-          <Typography variant="h6" component="h2">
-            Updated Programs
-          </Typography>
+          <div className="flex flex-col justify-around gap-10 md:flex-row ">
+            {/* New Programs List */}
+            <div className="flex flex-col items-center gap-2 pb-5">
+              <h2 className="text-xl font-medium">New Programs</h2>
+              <div className="flex flex-col gap-8">
+                {loadMorePrograms(newPrograms, newProgramsSize)}
+                <button
+                  className="w-[400px] rounded-md bg-gray-900 py-2 px-4 font-medium uppercase tracking-wide text-gray-200 hover:bg-gray-800 hover:text-gray-50"
+                  onClick={() => setNewProgramsSize(newProgramsSize + 10)}
+                >
+                  View More
+                </button>
+              </div>
+            </div>
 
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            {loadMorePrograms(justUpdated, justUpdatedSize, true)}
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ width: 400 }}
-              onClick={() => setJustUpdatedSize(justUpdatedSize + 10)}
-            >
-              View More
-            </Button>
-          </Box>
-        </Grid>
-      </Grid>
-    </Layout>
+            {/* Just Updated List */}
+            <div className="flex flex-col items-center gap-2 pb-5">
+              <h2 className="text-xl font-medium">Updated Programs</h2>
+              <div className="flex flex-col gap-8">
+                {loadMorePrograms(justUpdated, justUpdatedSize, true)}
+                <button
+                  className="w-[400px] rounded-md bg-gray-900 py-2 px-4 font-medium uppercase tracking-wide text-gray-200 hover:bg-gray-800 hover:text-gray-50"
+                  onClick={() => setJustUpdatedSize(justUpdatedSize + 10)}
+                >
+                  View More
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+      <Search programs={newPrograms} open={open} setOpen={setOpen} />
+    </>
   );
 }
 

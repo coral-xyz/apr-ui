@@ -11,6 +11,8 @@ function Program({
   readme,
   files,
 }: ProgramProps) {
+  const latestBuild = selectedBuild.id === builds[0].id;
+
   return (
     <>
       <ProgramBanner
@@ -19,6 +21,8 @@ function Program({
         verified={program.verified}
         buildId={selectedBuild.id}
         buildStatus={selectedBuild.buildStatus}
+        selectedBuild={selectedBuild}
+        latest={latestBuild}
       />
 
       <ProgramTabs
