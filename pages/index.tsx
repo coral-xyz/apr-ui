@@ -88,10 +88,10 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
           <div className="mx-auto mb-20 mt-10 flex flex-col gap-4">
             <div className="mx-auto">
               <Image
+                className="max-w-sm"
                 alt="hero"
                 src="/banner-text.png"
-                width="400px"
-                height="268px"
+                priority
               />
             </div>
 
