@@ -6,7 +6,7 @@ module.exports = withPlausibleProxy()({
     newNextLinkBehavior: true,
     scrollRestoration: true,
     legacyBrowsers: false,
-    runtime: "nodejs",
+    images: { allowFutureImage: true },
   },
   reactStrictMode: true,
   swcMinify: true,

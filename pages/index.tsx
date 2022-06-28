@@ -1,5 +1,5 @@
 import type { GetStaticProps } from "next";
-import Image from "next/image";
+import Image from "next/future/image";
 import fetch from "../utils/fetcher";
 import { useState } from "react";
 import loadMorePrograms from "../utils/loadMorePrograms";
@@ -11,8 +11,12 @@ import { SearchIcon } from "@heroicons/react/outline";
 const Search = dynamic(() => import("../components/search"));
 
 export async function getStaticProps({}: GetStaticProps) {
-  const builds = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/builds/latest`);
-  const programs = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/programs/latest`);
+  const builds = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/builds/latest`
+  );
+  const programs = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/programs/latest`
+  );
 
   // Sort programs by created_at (desc)
   programs.sort(function (a, b) {
@@ -21,7 +25,9 @@ export async function getStaticProps({}: GetStaticProps) {
 
   // Find if the last build for a program is verified
   for (let i = 0; i < programs.length; i++) {
-    const lastBuild = builds.find((element) => element.address === programs[i].address);
+    const lastBuild = builds.find(
+      (element) => element.address === programs[i].address
+    );
 
     if (lastBuild === undefined) {
       programs[i].verified = false;
@@ -81,7 +87,12 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
         <div className="mx-auto flex flex-col justify-around">
           <div className="mx-auto mb-20 mt-10 flex flex-col gap-4">
             <div className="mx-auto">
-              <Image alt="" className="" src="/banner-text.png" width="400px" height="268px" />
+              <Image
+                alt="hero"
+                src="/banner-text.png"
+                width="400px"
+                height="268px"
+              />
             </div>
 
             {/* Search */}
