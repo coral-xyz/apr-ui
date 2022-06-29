@@ -96,11 +96,11 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
             </div>
 
             {/* Search */}
-            <div className="relative mt-1 w-96 xl:w-[600px]">
+            <div className="relative mt-1 ">
               <button
                 onClick={() => setOpen(true)}
-                className="shadow-xs flex h-14 w-full cursor-text items-center
-                justify-between rounded-md border border-gray-100 bg-gray-100 px-5 font-medium shadow focus:outline-none"
+                className="shadow-xs flex h-14 w-96 min-w-full cursor-text
+                items-center justify-between rounded-md border border-gray-100 bg-gray-100 px-5 font-medium shadow focus:outline-none md:w-[600px]"
               >
                 <div className="flex flex-row items-center gap-2 text-gray-500">
                   <SearchIcon className="h-5 w-5" />

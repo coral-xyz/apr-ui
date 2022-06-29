@@ -42,45 +42,45 @@ function Source({ url, name, readme }: SourceProps) {
 
   return (
     <Box>
-      <Box
-        sx={{
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderColor: "divider",
-          display: "flex",
-          justifyContent: "flex-end",
-          borderTopLeftRadius: 5,
-          borderTopRightRadius: 5,
-          borderBottomStyle: "none",
-          backgroundColor: "grey.50",
-        }}
-      >
-        <Link href={url} target="_blank" rel="noopener">
-          <Button color="secondary">Raw</Button>
-        </Link>
-      </Box>
-      <Box
-        sx={{
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderColor: "divider",
-        }}
-      >
-        {name !== "README.md" ? (
-          <SyntaxHighlighter
-            showLineNumbers
-            wrapLongLines
-            language={language(name)}
-            customStyle={{ fontSize: 15, margin: 0 }}
+      {name !== "README.md" ? (
+        <>
+          <Box
+            sx={{
+              borderStyle: "solid",
+              borderWidth: 1,
+              borderColor: "divider",
+              display: "flex",
+              justifyContent: "flex-end",
+              borderTopLeftRadius: 5,
+              borderTopRightRadius: 5,
+              borderBottomStyle: "none",
+              backgroundColor: "grey.50",
+            }}
           >
-            {data}
-          </SyntaxHighlighter>
-        ) : (
-          <Box sx={{ paddingX: 4, paddingY: 2 }}>
-            <Readme readme={readme} />
+            <Link href={url} target="_blank" rel="noopener">
+              <Button color="secondary">Raw</Button>
+            </Link>
           </Box>
-        )}
-      </Box>
+          <Box
+            sx={{
+              borderStyle: "solid",
+              borderWidth: 1,
+              borderColor: "divider",
+            }}
+          >
+            <SyntaxHighlighter
+              showLineNumbers
+              wrapLongLines
+              language={language(name)}
+              customStyle={{ fontSize: 15, margin: 0 }}
+            >
+              {data}
+            </SyntaxHighlighter>
+          </Box>
+        </>
+      ) : (
+        <Readme readme={readme} />
+      )}
     </Box>
   );
 }

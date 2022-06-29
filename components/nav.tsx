@@ -79,7 +79,12 @@ function Nav() {
                   {/* Logo */}
                   <Link href="/">
                     <div className="flex">
-                      <Image alt="" src="/logo.png" width="120px" height="40px" />
+                      <Image
+                        alt=""
+                        src="/logo.png"
+                        width="120px"
+                        height="40px"
+                      />
                     </div>
                   </Link>
                 </div>
@@ -94,8 +99,13 @@ function Nav() {
                 justify-between rounded-md border border-gray-700 bg-gray-700 px-5  shadow focus:outline-none"
                       >
                         <div className="flex flex-row items-center gap-2 text-gray-500">
-                          <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          <span className="text-gray-400">Search by name or address</span>
+                          <SearchIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          <span className="text-gray-400">
+                            Search by name or address
+                          </span>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
                           <kbd className="inline-flex items-center rounded border border-gray-500 px-2 font-sans text-sm font-medium text-gray-400">
@@ -110,7 +120,7 @@ function Nav() {
                 {/* Actions */}
                 <div className="flex flex-row items-center gap-8">
                   <Link
-                    className="flex items-center gap-1 font-semibold text-gray-50 hover:text-gray-100"
+                    className="flex items-center gap-1 font-medium text-gray-50 hover:text-gray-100"
                     target="_blank"
                     rel="noreferrer"
                     href="https://anchor-lang.com?utm_source=apr.dev"
@@ -136,7 +146,7 @@ function Nav() {
                     <div className="hidden lg:block">
                       <div className="flex items-center">
                         {/* Auth or Profile */}
-                        <Menu as="div" className="relative z-20 flex-shrink-0">
+                        <Menu as="div" className="z-2 relative flex-shrink-0">
                           <div>
                             <Menu.Button className="flex cursor-pointer border-0 bg-gray-900">
                               <span className="sr-only">Open user menu</span>
@@ -194,7 +204,9 @@ function Nav() {
                                       "block flex w-full flex-row gap-2 px-4 py-2 text-sm text-gray-900"
                                     )}
                                     onClick={() => {
-                                      navigator.clipboard.writeText(publicKey.toBase58());
+                                      navigator.clipboard.writeText(
+                                        publicKey.toBase58()
+                                      );
                                     }}
                                   >
                                     <DuplicateIcon className="h-5 w-5" />
@@ -234,7 +246,10 @@ function Nav() {
                       {open ? (
                         <XIcon className="block h-6 w-6" aria-hidden="true" />
                       ) : (
-                        <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                        <MenuIcon
+                          className="block h-6 w-6"
+                          aria-hidden="true"
+                        />
                       )}
                     </Disclosure.Button>
                   </div>
@@ -248,7 +263,9 @@ function Nav() {
                 <div className="mt-3 space-y-1">
                   <Disclosure.Button className="ml-3 block w-full text-left">
                     <div className="flex flex-col tracking-wide">
-                      <span className="text-sm text-gray-300">Connected as</span>
+                      <span className="text-sm text-gray-300">
+                        Connected as
+                      </span>
                       <span className="text-gray-50">
                         {publicKey && (
                           <>
@@ -297,7 +314,9 @@ function Nav() {
           </>
         )}
       </Disclosure>
-      {showSearch && <Search open={showSearch} setOpen={setShowSearch} programs={data} />}
+      {showSearch && (
+        <Search open={showSearch} setOpen={setShowSearch} programs={data} />
+      )}
     </>
   );
 }

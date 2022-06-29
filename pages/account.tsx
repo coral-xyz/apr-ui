@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 import fetcher from "../utils/fetcher";
 import useSWR from "swr";
 import Tokens from "../components/account/tokens";
-import Notification from "../components/Notification";
+import Notification from "../components/notification";
 
 const metaTags = {
   title: "apr",
@@ -20,6 +20,7 @@ export default function Account() {
   const { data: user } = useSWR("/api/user", fetcher);
   const [username, setUsername] = useState("");
   const [show, setShow] = useState(false);
+
   useEffect(() => {
     if (username === "" && user) setUsername(user.username);
   }, [username, user]);
