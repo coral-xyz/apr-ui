@@ -19,7 +19,7 @@ import dynamic from "next/dynamic";
 const Readme = dynamic(() => import("./readme"));
 const Builds = dynamic(() => import("./builds"));
 const IdlViewer = dynamic(() => import("./idl-viewer"), { ssr: false });
-const SourceFiles = dynamic(() => import("./souce-files"));
+const SourceFiles = dynamic(() => import("./source-files"));
 
 function ProgramTabs({
   selectedBuild,
