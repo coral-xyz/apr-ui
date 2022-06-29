@@ -7,7 +7,6 @@ import { SessionProvider } from "next-auth/react";
 import PlausibleProvider from "next-plausible";
 import { ContextProvider } from "../context/ContextProvider";
 import Nav from "../components/nav";
-
 import "../style.css";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -34,7 +33,7 @@ export default function MyApp(props: MyAppProps) {
             <Nav />
             <CacheProvider value={emotionCache}>
               <ThemeProvider theme={theme}>
-                <div className="mx-auto max-w-7xl px-10 pt-10 pb-20">
+                <div className="mx-auto max-w-7xl px-10 pt-8 pb-20">
                   <Component {...pageProps} />
                 </div>
               </ThemeProvider>
