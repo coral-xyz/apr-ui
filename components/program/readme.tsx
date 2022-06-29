@@ -5,8 +5,8 @@ function Readme({ readme }: ReadmeProps) {
   return (
     <div className="rounded-t-md border border-slate-300">
       <div className="flex items-center gap-1 bg-slate-100 py-2 pl-4">
-        <BookOpenIcon className="h-6 w-6 text-gray-700" />
-        <h5 className="font-medium tracking-wide text-gray-700">Readme</h5>
+        <BookOpenIcon className="h-6 w-6 text-gray-500" />
+        <h5 className=" tracking-wide text-gray-700">Readme</h5>
       </div>
 
       <div

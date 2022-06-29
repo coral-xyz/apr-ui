@@ -51,7 +51,7 @@ function table(
                   }}
                   sx={{ cursor: "pointer" }}
                 >
-                  <Typography sx={{ display: "flex" }}>
+                  <Typography sx={{ display: "flex", fontSize: 14 }}>
                     <Folder
                       sx={{
                         color: "grey.500",
@@ -79,7 +79,7 @@ function table(
                   }}
                   sx={{ cursor: "pointer" }}
                 >
-                  <Typography sx={{ display: "flex" }}>
+                  <Typography sx={{ display: "flex", fontSize: 14 }}>
                     <InsertDriveFileOutlinedIcon /> &nbsp;
                     {file.name}
                   </Typography>
