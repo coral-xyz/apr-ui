@@ -6,6 +6,7 @@ import useAuth from "../hooks/useAuth";
 import fetcher from "../utils/fetcher";
 import useSWR from "swr";
 import Tokens from "../components/account/tokens";
+import Notification from "../components/Notification";
 
 const metaTags = {
   title: "apr",
@@ -18,7 +19,7 @@ export default function Account() {
   const { session, status } = useAuth(true);
   const { data: user } = useSWR("/api/user", fetcher);
   const [username, setUsername] = useState("");
-
+  const [show, setShow] = useState(false);
   useEffect(() => {
     if (username === "" && user) setUsername(user.username);
   }, [username, user]);
@@ -30,11 +31,19 @@ export default function Account() {
       method: "PUT",
       body: JSON.stringify({ username }),
     });
+    setShow(true);
+    setTimeout(() => setShow(false), 3000);
   };
 
   return (
     <Layout metaTags={metaTags}>
       <Grid container gap={10}>
+        <Notification
+          show={show}
+          setShow={setShow}
+          message="Username updated!"
+          subText="Your username has been successfully updated."
+        />
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
           <Box
             sx={{
