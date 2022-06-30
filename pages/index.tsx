@@ -100,7 +100,7 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
               <button
                 onClick={() => setOpen(true)}
                 className="shadow-xs flex h-14 w-96 min-w-full cursor-text
-                items-center justify-between rounded-md border border-gray-100 bg-gray-100 px-5 font-medium shadow focus:outline-none md:w-[600px]"
+                items-center justify-between rounded-md border border-gray-200/80 bg-gray-100 px-5 font-medium shadow focus:outline-none md:w-[600px]"
               >
                 <div className="flex flex-row items-center gap-2 text-gray-500">
                   <SearchIcon className="h-5 w-5" />
@@ -115,8 +115,10 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
 
           <div className="flex flex-col justify-around gap-10 md:flex-row ">
             {/* New Programs List */}
-            <div className="flex flex-col items-center gap-2 pb-5">
-              <h2 className="text-xl font-medium">New Programs</h2>
+            <div className="flex flex-col items-center gap-5 pb-5">
+              <h2 className="text-2xl font-medium tracking-tight">
+                New Programs
+              </h2>
               <div className="flex flex-col gap-8">
                 {loadMorePrograms(newPrograms, newProgramsSize)}
                 <button
@@ -129,8 +131,10 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
             </div>
 
             {/* Just Updated List */}
-            <div className="flex flex-col items-center gap-2 pb-5">
-              <h2 className="text-xl font-medium">Updated Programs</h2>
+            <div className="flex flex-col items-center gap-5 pb-5">
+              <h2 className="text-2xl font-medium tracking-tight">
+                Just Updated
+              </h2>
               <div className="flex flex-col gap-8">
                 {loadMorePrograms(justUpdated, justUpdatedSize, true)}
                 <button
