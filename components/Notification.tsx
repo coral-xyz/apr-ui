@@ -1,9 +1,9 @@
-import { Dispatch, Fragment, SetStateAction } from "react";
+import { Dispatch, Fragment, memo, SetStateAction } from "react";
 import { Transition } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/outline";
 import { XIcon } from "@heroicons/react/solid";
 
-export default function Notification({
+function Notification({
   show,
   setShow,
   message,
@@ -63,3 +63,5 @@ export default function Notification({
     </div>
   );
 }
+
+export default memo(Notification);

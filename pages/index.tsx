@@ -2,13 +2,41 @@ import type { GetStaticProps } from "next";
 import Image from "next/future/image";
 import fetch from "../utils/fetcher";
 import { useState } from "react";
-import loadMorePrograms from "../utils/loadMorePrograms";
 import dynamic from "next/dynamic";
 import Layout from "../components/layout";
 import buildStatus from "../utils/build-status";
 import { SearchIcon } from "@heroicons/react/outline";
 
 const Search = dynamic(() => import("../components/search"));
+const ProgramMiniCard = dynamic(
+  () => import("../components/program-mini-card")
+);
+
+function loadMorePrograms(programs, amount, buildType = false) {
+  let size;
+
+  if (programs.length < amount) {
+    size = programs.length;
+  } else {
+    size = amount;
+  }
+
+  let component = [];
+  for (let i = 0; i < size; i++) {
+    component.push(
+      <ProgramMiniCard
+        key={programs[i].id}
+        name={programs[i].name}
+        address={programs[i].address}
+        verified={programs[i].verified}
+        id={buildType && programs[i].id}
+        buildStatus={programs[i].buildStatus}
+      />
+    );
+  }
+
+  return component;
+}
 
 export async function getStaticProps({}: GetStaticProps) {
   const builds = await fetch(
@@ -100,7 +128,7 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
               <button
                 onClick={() => setOpen(true)}
                 className="shadow-xs flex h-14 w-96 min-w-full cursor-text
-                items-center justify-between rounded-md border border-gray-200/80 bg-gray-100 px-5 font-medium shadow focus:outline-none md:w-[600px]"
+                items-center justify-between rounded-md border border-gray-200/80 bg-gray-100 px-5 font-medium shadow hover:border-slate-200/80 hover:bg-slate-100 focus:outline-none md:w-[600px]"
               >
                 <div className="flex flex-row items-center gap-2 text-gray-500">
                   <SearchIcon className="h-5 w-5" />
