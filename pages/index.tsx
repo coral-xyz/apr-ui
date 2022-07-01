@@ -1,18 +1,50 @@
 import type { GetStaticProps } from "next";
-import Image from "next/image";
+import Image from "next/future/image";
 import fetch from "../utils/fetcher";
 import { useState } from "react";
-import loadMorePrograms from "../utils/loadMorePrograms";
 import dynamic from "next/dynamic";
 import Layout from "../components/layout";
 import buildStatus from "../utils/build-status";
 import { SearchIcon } from "@heroicons/react/outline";
 
 const Search = dynamic(() => import("../components/search"));
+const ProgramMiniCard = dynamic(
+  () => import("../components/program-mini-card")
+);
+
+function loadMorePrograms(programs, amount, buildType = false) {
+  let size;
+
+  if (programs.length < amount) {
+    size = programs.length;
+  } else {
+    size = amount;
+  }
+
+  let component = [];
+  for (let i = 0; i < size; i++) {
+    component.push(
+      <ProgramMiniCard
+        key={programs[i].id}
+        name={programs[i].name}
+        address={programs[i].address}
+        verified={programs[i].verified}
+        id={buildType && programs[i].id}
+        buildStatus={programs[i].buildStatus}
+      />
+    );
+  }
+
+  return component;
+}
 
 export async function getStaticProps({}: GetStaticProps) {
-  const builds = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/builds/latest`);
-  const programs = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/programs/latest`);
+  const builds = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/builds/latest`
+  );
+  const programs = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/programs/latest`
+  );
 
   // Sort programs by created_at (desc)
   programs.sort(function (a, b) {
@@ -21,7 +53,9 @@ export async function getStaticProps({}: GetStaticProps) {
 
   // Find if the last build for a program is verified
   for (let i = 0; i < programs.length; i++) {
-    const lastBuild = builds.find((element) => element.address === programs[i].address);
+    const lastBuild = builds.find(
+      (element) => element.address === programs[i].address
+    );
 
     if (lastBuild === undefined) {
       programs[i].verified = false;
@@ -81,15 +115,20 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
         <div className="mx-auto flex flex-col justify-around">
           <div className="mx-auto mb-20 mt-10 flex flex-col gap-4">
             <div className="mx-auto">
-              <Image alt="" className="" src="/banner-text.png" width="400px" height="268px" />
+              <Image
+                className="max-w-sm"
+                alt="hero"
+                src="/banner-text.png"
+                priority
+              />
             </div>
 
             {/* Search */}
-            <div className="relative mt-1 w-96 xl:w-[600px]">
+            <div className="relative mt-1 ">
               <button
                 onClick={() => setOpen(true)}
-                className="shadow-xs flex h-14 w-full cursor-text items-center
-                justify-between rounded-md border border-gray-100 bg-gray-100 px-5 font-medium shadow focus:outline-none"
+                className="shadow-xs flex h-14 w-96 min-w-full cursor-text
+                items-center justify-between rounded-md border border-gray-200/80 bg-gray-100 px-5 font-medium shadow hover:border-slate-200/80 hover:bg-slate-100 focus:outline-none md:w-[600px]"
               >
                 <div className="flex flex-row items-center gap-2 text-gray-500">
                   <SearchIcon className="h-5 w-5" />
@@ -104,8 +143,10 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
 
           <div className="flex flex-col justify-around gap-10 md:flex-row ">
             {/* New Programs List */}
-            <div className="flex flex-col items-center gap-2 pb-5">
-              <h2 className="text-xl font-medium">New Programs</h2>
+            <div className="flex flex-col items-center gap-5 pb-5">
+              <h2 className="text-2xl font-medium tracking-tight">
+                New Programs
+              </h2>
               <div className="flex flex-col gap-8">
                 {loadMorePrograms(newPrograms, newProgramsSize)}
                 <button
@@ -118,8 +159,10 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
             </div>
 
             {/* Just Updated List */}
-            <div className="flex flex-col items-center gap-2 pb-5">
-              <h2 className="text-xl font-medium">Updated Programs</h2>
+            <div className="flex flex-col items-center gap-5 pb-5">
+              <h2 className="text-2xl font-medium tracking-tight">
+                Just Updated
+              </h2>
               <div className="flex flex-col gap-8">
                 {loadMorePrograms(justUpdated, justUpdatedSize, true)}
                 <button

@@ -17,7 +17,7 @@ function ProgramCard({
 }: ProgramCardProps) {
   return (
     <>
-      <div className="flex flex-col gap-8 p-4">
+      <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-4 lg:flex-row">
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-2 lg:flex-row">
@@ -52,7 +52,10 @@ function ProgramCard({
         </div>
 
         <div className="relative">
-          <div className="absolute inset-0 flex items-center" aria-hidden="true">
+          <div
+            className="absolute inset-0 flex items-center"
+            aria-hidden="true"
+          >
             <div className="w-full border-t border-gray-200" />
           </div>
         </div>
@@ -60,8 +63,14 @@ function ProgramCard({
         <div className="flex flex-col justify-between gap-6 pr-4 lg:flex-row">
           {/* Verification Status */}
           <div className="flex flex-col gap-2">
-            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">Status</h5>
-            {verified ? <Status buildStatus="verified" /> : <Status buildStatus="failed" />}
+            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
+              Status
+            </h5>
+            {verified ? (
+              <Status buildStatus="verified" />
+            ) : (
+              <Status buildStatus="failed" />
+            )}
           </div>
 
           {/* Last Updated */}
@@ -76,7 +85,9 @@ function ProgramCard({
 
           {/* Build */}
           <div className="flex flex-col gap-2">
-            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">Build</h5>
+            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
+              Build
+            </h5>
             <div className="flex flex-row gap-1 text-sky-500">
               <CloudDownloadOutlined />
               <a
@@ -90,10 +101,15 @@ function ProgramCard({
 
           {/* Artifact */}
           <div className="flex flex-col gap-2">
-            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">Artifact</h5>
+            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
+              Artifact
+            </h5>
             <div className="flex flex-row gap-1 text-sky-500">
               <CloudDownloadOutlined />
-              <a className="font-medium text-sky-500" href={selectedBuild.artifacts.binary}>
+              <a
+                className="font-medium text-sky-500"
+                href={selectedBuild.artifacts.binary}
+              >
                 {selectedBuild.name}.so
               </a>
             </div>

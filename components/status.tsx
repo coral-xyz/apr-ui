@@ -1,45 +1,39 @@
-import { CheckCircle } from "@mui/icons-material";
-import { Chip } from "@mui/material";
-import ReportIcon from "@mui/icons-material/Report";
-import DangerousIcon from "@mui/icons-material/Dangerous";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { memo } from "react";
+import {
+  CheckCircleIcon,
+  ClockIcon,
+  ExclamationCircleIcon,
+  ExclamationIcon,
+} from "@heroicons/react/solid";
 
 function Status({ buildStatus }: StatusProps) {
   return (
     <div>
       {buildStatus === "verified" && (
-        <Chip
-          variant="filled"
-          label="Verified"
-          color="success"
-          icon={<CheckCircle />}
-        />
+        <span className="inline-flex items-center gap-1 rounded-md bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800">
+          <CheckCircleIcon className="h-5 w-5" />
+          Verified
+        </span>
       )}
 
       {buildStatus === "failed" && (
-        <Chip
-          variant="filled"
-          label="Verification Failed"
-          color="error"
-          icon={<ReportIcon />}
-        />
+        <span className="inline-flex items-center gap-1 rounded-md bg-red-100 px-2.5 py-0.5 text-sm font-medium text-red-800">
+          <ExclamationCircleIcon className="h-5 w-5" />
+          Verification Failed
+        </span>
       )}
+
       {buildStatus === "aborted" && (
-        <Chip
-          variant="outlined"
-          label="Build Aborted"
-          color="warning"
-          icon={<DangerousIcon />}
-        />
+        <span className="inline-flex items-center gap-1 rounded-md bg-yellow-100 px-2.5 py-0.5 text-sm font-medium text-yellow-800">
+          <ExclamationIcon className="h-5 w-5" />
+          Build Aborted
+        </span>
       )}
       {buildStatus === "building" && (
-        <Chip
-          variant="outlined"
-          label="Building"
-          color="info"
-          icon={<AutorenewIcon />}
-        />
+        <span className="inline-flex items-center gap-1 rounded-md bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800">
+          <ClockIcon className="h-5 w-5" />
+          Building
+        </span>
       )}
     </div>
   );

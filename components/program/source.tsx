@@ -2,9 +2,6 @@ import { memo } from "react";
 import useSWR from "swr";
 import fetchMD from "../../utils/fetcher-md";
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import Box from "@mui/material/Box";
-import { Button } from "@mui/material";
-import Link from "@mui/material/Link";
 import Readme from "./readme";
 
 function language(file: string): string {
@@ -39,49 +36,36 @@ function language(file: string): string {
 
 function Source({ url, name, readme }: SourceProps) {
   const { data } = useSWR(url as string, fetchMD);
-
+  console.log(url);
   return (
-    <Box>
-      <Box
-        sx={{
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderColor: "divider",
-          display: "flex",
-          justifyContent: "flex-end",
-          borderTopLeftRadius: 5,
-          borderTopRightRadius: 5,
-          borderBottomStyle: "none",
-          backgroundColor: "grey.50",
-        }}
-      >
-        <Link href={url} target="_blank" rel="noopener">
-          <Button color="secondary">Raw</Button>
-        </Link>
-      </Box>
-      <Box
-        sx={{
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderColor: "divider",
-        }}
-      >
-        {name !== "README.md" ? (
-          <SyntaxHighlighter
-            showLineNumbers
-            wrapLongLines
-            language={language(name)}
-            customStyle={{ fontSize: 15, margin: 0 }}
-          >
-            {data}
-          </SyntaxHighlighter>
-        ) : (
-          <Box sx={{ paddingX: 4, paddingY: 2 }}>
-            <Readme readme={readme} />
-          </Box>
-        )}
-      </Box>
-    </Box>
+    <div>
+      {name !== "README.md" ? (
+        <>
+          <div className="flex justify-end rounded-t-md rounded-t-md border border-b-0 border-slate-300 bg-slate-100">
+            <a
+              className="mr-2 p-2 tracking-wide"
+              href={url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Raw
+            </a>
+          </div>
+          <div className="border border-slate-300 py-2">
+            <SyntaxHighlighter
+              showLineNumbers
+              wrapLongLines
+              language={language(name)}
+              customStyle={{ fontSize: 15, margin: 0 }}
+            >
+              {data}
+            </SyntaxHighlighter>
+          </div>
+        </>
+      ) : (
+        <Readme readme={readme} />
+      )}
+    </div>
   );
 }
 

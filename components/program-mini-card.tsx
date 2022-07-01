@@ -1,58 +1,33 @@
 import { memo } from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
-import Box from "@mui/material/Box";
 import Link from "next/link";
 import Status from "./status";
 
-function ProgramMiniCard({ name, address, id, buildStatus }: ProgramMiniCardProps) {
-  const programUrl: string = id ? `/program/${address}/build/${id}` : `/program/${address}`;
+function ProgramMiniCard({
+  name,
+  address,
+  id,
+  buildStatus,
+}: ProgramMiniCardProps) {
+  const programUrl: string = id
+    ? `/program/${address}/build/${id}`
+    : `/program/${address}`;
 
   return (
-    <Card
-      sx={{
-        maxWidth: 500,
-        minWidth: 400,
-        backgroundColor: "grey.50",
-        border: 1,
-        borderColor: "grey.200",
-      }}
-    >
-      <CardActionArea>
-        <Link href={programUrl}>
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 1,
-            }}
-          >
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              {/* Program Name */}
-              <Typography
-                gutterBottom
-                variant="h6"
-                component="div"
-                noWrap
-                sx={{ fontSize: 19, maxWidth: 275 }}
-              >
-                {name}
-              </Typography>
+    <Link href={programUrl}>
+      <div className="flex w-96 flex-col justify-between gap-2 rounded-lg border border-gray-100 bg-gray-100 py-5 px-4 shadow-md hover:border-slate-100 hover:bg-slate-100 lg:w-full">
+        <div className="flex flex-row justify-between">
+          {/* Program Name */}
+          <h4 className="text-lg font-medium">{name}</h4>
 
-              {/* Verification Status */}
-              <Status buildStatus={buildStatus} />
-            </Box>
+          {/* Verification Status */}
+          <Status buildStatus={buildStatus} />
+        </div>
 
-            {/* Program Address */}
-            <Typography noWrap variant="subtitle2" color="text.secondary" sx={{ maxWidth: 360 }}>
-              {address}
-            </Typography>
-          </CardContent>
-        </Link>
-      </CardActionArea>
-    </Card>
+        {/* Program Address */}
+
+        <h5 className="overflow-hidden text-ellipsis text-sm">{address}</h5>
+      </div>
+    </Link>
   );
 }
 
