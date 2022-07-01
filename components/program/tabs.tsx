@@ -1,9 +1,8 @@
 import {
   ClockIcon,
   CodeIcon,
+  CollectionIcon,
   DocumentTextIcon,
-  FolderOpenIcon,
-  ShieldCheckIcon,
   TerminalIcon,
 } from "@heroicons/react/solid";
 import * as React from "react";
@@ -13,6 +12,7 @@ import fetcher from "../../utils/fetcher";
 
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import Instructions from "./instructions";
 
 const Readme = dynamic(() => import("./readme"));
 const Builds = dynamic(() => import("./builds"));
@@ -23,9 +23,8 @@ const tabs = [
   { name: "Readme", icon: DocumentTextIcon },
   { name: "Explorer", icon: CodeIcon },
   { name: "IDL", icon: TerminalIcon },
+  { name: "Instructions", icon: CollectionIcon },
   { name: "Builds", icon: ClockIcon },
-  { name: "Audits", icon: ShieldCheckIcon, disabled: true },
-  { name: "Dependencies", icon: FolderOpenIcon, disabled: true },
 ];
 
 function classNames(...classes) {
@@ -63,12 +62,14 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
               <button
                 key={tab.name}
                 onClick={() => {
-                  // setSelectedTab(tab.name)
                   router.push(
                     `/program/${router.query.address}?tab=${tab.name}`
                   );
                 }}
-                disabled={tab.disabled || (tab.name === "IDL" && !idl)}
+                disabled={
+                  (tab.name === "IDL" && !idl) ||
+                  (tab.name === "Instructions" && !idl)
+                }
                 className={classNames(
                   tab.name === selectedTab
                     ? "border-amber-500 text-amber-600"
@@ -82,13 +83,20 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
                     tab.name === selectedTab
                       ? "text-amber-500"
                       : "text-gray-400 group-hover:text-gray-500",
-                    (tab.disabled || (tab.name === "IDL" && !idl)) &&
-                      "text-gray-300 group-hover:text-gray-300",
+                    (tab.name === "IDL" && !idl) ||
+                      (tab.name === "Instructions" &&
+                        !idl &&
+                        "text-gray-300 group-hover:text-gray-300"),
                     "-ml-0.5 mr-2 h-5 w-5"
                   )}
                   aria-hidden="true"
                 />
                 <span>{tab.name}</span>
+                {tab.name === "Instructions" && (
+                  <span className="ml-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                    New
+                  </span>
+                )}
               </button>
             ))}
           </nav>
@@ -102,6 +110,12 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
       )}
       {selectedTab === "IDL" && idl && (
         <IdlViewer data={idl} url={selectedBuild.artifacts.idl} />
+      )}
+      {selectedTab === "Instructions" && idl && (
+        <Instructions
+          data={idl.instructions}
+          url={selectedBuild.artifacts.idl}
+        />
       )}
     </div>
   );
