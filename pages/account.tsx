@@ -7,8 +7,8 @@ import fetcher from "../utils/fetcher";
 import useSWR from "swr";
 import dynamic from "next/dynamic";
 
-const Notification = dynamic(() => import("../components/notification"));
 const Tokens = dynamic(() => import("../components/account/tokens"));
+const Success = dynamic(() => import("../components/notifications/success"));
 
 const metaTags = {
   title: "apr",
@@ -41,12 +41,6 @@ export default function Account() {
   return (
     <Layout metaTags={metaTags}>
       <Grid container gap={10}>
-        <Notification
-          show={show}
-          setShow={setShow}
-          message="Username updated!"
-          subText="Your username has been successfully updated."
-        />
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
           <Box
             sx={{
@@ -78,13 +72,19 @@ export default function Account() {
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
           <Alert variant="filled" severity="error">
             <AlertTitle>https://anchor.projectserum.com</AlertTitle>
-            If you have a user already in the old version, please continue
-            managing your keys in that UI
+            If you have a user already in the old version, please continue managing your keys in
+            that UI
           </Alert>
         </Grid>
         <Grid item xs={12}>
           <Tokens />
         </Grid>
+        <Success
+          show={show}
+          setShow={setShow}
+          message="Username updated!"
+          subText="Your username has been successfully updated."
+        />
       </Grid>
     </Layout>
   );
