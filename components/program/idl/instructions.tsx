@@ -1,31 +1,6 @@
 import { memo } from "react";
 
-function renderArguments(args) {
-  let component = [];
-
-  for (let i = 0; i < args.length; i++) {
-    let type = "";
-    if (args[i].type.defined) {
-      type = args[i].type.defined;
-    } else if (args[i].type.option) {
-      type = `Option<None, ${args[i].type.option}>`;
-    } else {
-      type = args[i].type;
-    }
-    component.push(
-      <div key={args[i].name}>
-        <span>
-          {args[i].name}:
-          <span className="inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">
-            `{type}`
-          </span>
-        </span>
-      </div>
-    );
-  }
-
-  return component;
-}
+import renderArguments from "../../../utils/renderArguments";
 
 function renderAccounts(accounts) {
   let component = [];
@@ -53,9 +28,9 @@ function renderAccounts(accounts) {
   return component;
 }
 
-function Instructions({ data, url }: InstructionsProps) {
+function Instructions({ data }: InstructionsProps) {
   return (
-    <div className="mt-8 flex flex-col">
+    <div className="mt-5 flex flex-col">
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
           <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
@@ -66,7 +41,7 @@ function Instructions({ data, url }: InstructionsProps) {
                     scope="col"
                     className="py-3 pl-4 pr-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 sm:pl-6"
                   >
-                    Instruction
+                    Name
                   </th>
                   <th
                     scope="col"
@@ -83,16 +58,16 @@ function Instructions({ data, url }: InstructionsProps) {
                 </tr>
               </thead>
               <tbody className="prose divide-y divide-gray-200 bg-white">
-                {data.map((ix) => (
-                  <tr key={ix.name}>
+                {data.map((item) => (
+                  <tr key={item.name}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 font-mono text-sm text-gray-500 sm:pl-6">
-                      {ix.name}
+                      {item.name}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 font-mono text-sm text-gray-500">
-                      {renderArguments(ix.args)}
+                      {renderArguments(item.args)}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 font-mono text-sm text-gray-500">
-                      {renderAccounts(ix.accounts)}
+                      {renderAccounts(item.accounts)}
                     </td>
                   </tr>
                 ))}
@@ -107,7 +82,6 @@ function Instructions({ data, url }: InstructionsProps) {
 
 interface InstructionsProps {
   data: any;
-  url: string;
 }
 
 export default memo(Instructions);

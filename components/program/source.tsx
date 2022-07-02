@@ -36,18 +36,13 @@ function language(file: string): string {
 
 function Source({ url, name, readme }: SourceProps) {
   const { data } = useSWR(url as string, fetchMD);
-  console.log(url);
+
   return (
     <div>
       {name !== "README.md" ? (
         <>
-          <div className="flex justify-end rounded-t-md rounded-t-md border border-b-0 border-slate-300 bg-slate-100">
-            <a
-              className="mr-2 p-2 tracking-wide"
-              href={url}
-              target="_blank"
-              rel="noreferrer"
-            >
+          <div className="flex justify-end rounded-t-md border border-b-0 border-slate-300 bg-slate-100">
+            <a className="mr-2 p-2 tracking-wide" href={url} target="_blank" rel="noreferrer">
               Raw
             </a>
           </div>

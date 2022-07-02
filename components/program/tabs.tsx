@@ -1,18 +1,9 @@
-import {
-  ClockIcon,
-  CodeIcon,
-  CollectionIcon,
-  DocumentTextIcon,
-  TerminalIcon,
-} from "@heroicons/react/solid";
-import * as React from "react";
+import { ClockIcon, CodeIcon, DocumentTextIcon, TerminalIcon } from "@heroicons/react/solid";
 import { memo } from "react";
 import useSWR from "swr";
-import fetcher from "../../utils/fetcher";
-
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import Instructions from "./instructions";
+import fetcher from "../../utils/fetcher";
 
 const Readme = dynamic(() => import("./readme"));
 const Builds = dynamic(() => import("./builds"));
@@ -23,7 +14,6 @@ const tabs = [
   { name: "Readme", icon: DocumentTextIcon },
   { name: "Explorer", icon: CodeIcon },
   { name: "IDL", icon: TerminalIcon },
-  { name: "Instructions", icon: CollectionIcon },
   { name: "Builds", icon: ClockIcon },
 ];
 
@@ -43,7 +33,6 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
         <label htmlFor="tabs" className="sr-only">
           Select a tab
         </label>
-        {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
         <select
           id="tabs"
           name="tabs"
@@ -62,14 +51,9 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
               <button
                 key={tab.name}
                 onClick={() => {
-                  router.push(
-                    `/program/${router.query.address}?tab=${tab.name}`
-                  );
+                  router.push(`/program/${router.query.address}?tab=${tab.name}`);
                 }}
-                disabled={
-                  (tab.name === "IDL" && !idl) ||
-                  (tab.name === "Instructions" && !idl)
-                }
+                disabled={(tab.name === "IDL" && !idl) || (tab.name === "Instructions" && !idl)}
                 className={classNames(
                   tab.name === selectedTab
                     ? "border-amber-500 text-amber-600"
@@ -83,10 +67,7 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
                     tab.name === selectedTab
                       ? "text-amber-500"
                       : "text-gray-400 group-hover:text-gray-500",
-                    (tab.name === "IDL" && !idl) ||
-                      (tab.name === "Instructions" &&
-                        !idl &&
-                        "text-gray-300 group-hover:text-gray-300"),
+                    tab.name === "IDL" && !idl && "text-gray-300 group-hover:text-gray-300",
                     "-ml-0.5 mr-2 h-5 w-5"
                   )}
                   aria-hidden="true"
@@ -108,15 +89,7 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
       {selectedTab === "Explorer" && (
         <SourceFiles name={selectedBuild.name} files={files} readme={readme} />
       )}
-      {selectedTab === "IDL" && idl && (
-        <IdlViewer data={idl} url={selectedBuild.artifacts.idl} />
-      )}
-      {selectedTab === "Instructions" && idl && (
-        <Instructions
-          data={idl.instructions}
-          url={selectedBuild.artifacts.idl}
-        />
-      )}
+      {selectedTab === "IDL" && idl && <IdlViewer data={idl} url={selectedBuild.artifacts.idl} />}
     </div>
   );
 }

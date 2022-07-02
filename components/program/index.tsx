@@ -4,13 +4,7 @@ import { memo } from "react";
 const ProgramBanner = dynamic(() => import("./program-banner"));
 const Tabs = dynamic(() => import("./tabs"));
 
-function Program({
-  program,
-  selectedBuild,
-  builds,
-  readme,
-  files,
-}: ProgramProps) {
+function Program({ program, selectedBuild, builds, readme, files }: ProgramProps) {
   const latestBuild = selectedBuild.id === builds[0].id;
 
   return (
@@ -25,12 +19,7 @@ function Program({
         latest={latestBuild}
       />
 
-      <Tabs
-        selectedBuild={selectedBuild}
-        builds={builds}
-        readme={readme}
-        files={files}
-      />
+      <Tabs selectedBuild={selectedBuild} builds={builds} readme={readme} files={files} />
     </div>
   );
 }
