@@ -1,24 +1,42 @@
 import { memo } from "react";
-import { Card, CardActionArea, Stack } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
+import { CalendarIcon } from "@heroicons/react/outline";
 import InputIcon from "@mui/icons-material/Input";
 import Link from "next/link";
 import Status from "../status";
 import FormatDate from "../../utils/format-date";
-
-const Item = styled(CardActionArea)(({ theme }) => ({
-  padding: theme.spacing(2),
-  color: theme.palette.text.secondary,
-  display: "flex",
-  justifyContent: "flex-start",
-}));
-
+const CardActionArea = ({ children }) => {
+  return (
+    <div className=" container m-3 mx-auto flex flex-col  justify-evenly gap-4 rounded-md p-2 align-baseline  text-[#666666] shadow-md sm:px-6 md:flex-row md:align-middle lg:px-8">
+      {children}
+    </div>
+  );
+};
+const Item = ({ children }) => {
+  return <CardActionArea>{children}</CardActionArea>;
+};
+const Box = ({ children }) => {
+  return <div className="mx-auto md:w-min">{children}</div>;
+};
+const Stack = ({ children, sx }) => {
+  return (
+    <div style={sx} className="overflow-hidden rounded-md">
+      <ul role="list" className="divide-y-2 divide-gray-200">
+        {children}
+      </ul>
+    </div>
+  );
+};
+// padding: theme.spacing(2),
+// color: theme.palette.text.secondary,
+// display: "flex",
+// justifyContent: "flex-start",
 function Builds({ builds }: BuildsProps) {
   return (
-    <Stack spacing={3} sx={{ paddingTop: 3 }}>
+    <Stack
+      sx={{ paddingTop: "1rem", paddingLeft: "1rem", paddingRight: "1rem" }}
+    >
+      {/* spacing={3} sx={{ paddingTop: 3 }} */}
       {builds.map((build) => {
         return (
           <Link
@@ -26,56 +44,42 @@ function Builds({ builds }: BuildsProps) {
             href={`/program/${build.address}/build/${build.id}`}
             passHref
           >
-            <Card elevation={2}>
-              <Item
-                sx={{
-                  display: "flex",
-                  height: 88,
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box sx={{ display: "flex" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      gap: 2,
-                      alignItems: "center",
-                      marginRight: 5,
-                      cursor: "pointer",
-                      paddingLeft: 2,
-                      paddingRight: 2,
-                    }}
-                  >
-                    <Typography variant="h6">Build #{build.id}</Typography>
+            <div className=" overflow-hidden rounded-lg   bg-white">
+              <div className="px-4">
+                <Item>
+                  <div className="md:w-xs mb-2 flex flex-col justify-center">
+                    <h6 className="prose-zinc  font-medium   lg:prose-lg">
+                      Build #{build.id}
+                    </h6>
+                  </div>
+                  <Box>
+                    <div className="flex flex-col gap-4">
+                      <div className="justifystart flex gap-2 md:gap-4">
+                        <CalendarIcon height="26" />
+                        <div className="prose-md prose-gray text-sm font-medium">
+                          Publish {FormatDate(build.updated_at)}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 ">
+                        {build.sha256 && (
+                          <>
+                            <InputIcon />
+                            <div className="prose-md prose-gray text-sm font-medium">
+                              {build.sha256}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </Box>
 
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                  >
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <CalendarMonthIcon />
-                      <Typography variant="subtitle2">
-                        Publish {FormatDate(build.updated_at)}
-                      </Typography>
-                    </Box>
-
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      {build.sha256 && (
-                        <>
-                          <InputIcon />
-                          <Typography variant="subtitle2">
-                            {build.sha256}
-                          </Typography>
-                        </>
-                      )}
-                    </Box>
-                  </Box>
-                </Box>
-                <Box>
-                  <Status buildStatus={build.buildStatus} />
-                </Box>
-              </Item>
-            </Card>
+                  <div className="flex flex-col justify-center">
+                    <Status buildStatus={build.buildStatus} />
+                  </div>
+                </Item>
+              </div>
+            </div>
           </Link>
         );
       })}

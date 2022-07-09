@@ -10,14 +10,14 @@ function Status({ buildStatus }: StatusProps) {
   return (
     <div>
       {buildStatus === "verified" && (
-        <span className="inline-flex items-center gap-1 rounded-md bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800">
+        <span className="inline-flex items-center gap-1 rounded-md bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800 md:ml-16">
           <CheckCircleIcon className="h-5 w-5" />
           Verified
         </span>
       )}
 
       {buildStatus === "failed" && (
-        <span className="inline-flex items-center gap-1 rounded-md bg-red-100 px-2.5 py-0.5 text-sm font-medium text-red-800">
+        <span className="md:ml-18 inline-flex items-center gap-1 rounded-md  bg-red-100 px-2.5 py-0.5 text-sm font-medium text-red-800  ">
           <ExclamationCircleIcon className="h-5 w-5" />
           Verification Failed
         </span>
