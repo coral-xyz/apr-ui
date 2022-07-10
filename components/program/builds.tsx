@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { CalendarIcon } from "@heroicons/react/outline";
-import InputIcon from "@mui/icons-material/Input";
+import { KeyIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import Status from "../status";
 import FormatDate from "../../utils/format-date";
@@ -38,7 +38,9 @@ function Builds({ builds }: BuildsProps) {
                         <div className="flex gap-4 ">
                           {build.sha256 && (
                             <>
-                              <InputIcon />
+                              <span className="h-6 w-6">
+                                <KeyIcon />
+                              </span>
                               <div className="prose-md prose-gray text-sm font-medium">
                                 {build.sha256}
                               </div>
