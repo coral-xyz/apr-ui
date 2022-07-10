@@ -1,13 +1,7 @@
 import { memo } from "react";
 import Link from "next/link";
-import Status from "./status";
 
-function ProgramMiniCard({
-  name,
-  address,
-  id,
-  buildStatus,
-}: ProgramMiniCardProps) {
+function ProgramMiniCard({ name, address, id }: ProgramMiniCardProps) {
   const programUrl: string = id
     ? `/program/${address}/build/${id}`
     : `/program/${address}`;
@@ -18,13 +12,9 @@ function ProgramMiniCard({
         <div className="flex flex-row justify-between">
           {/* Program Name */}
           <h4 className="text-lg font-medium">{name}</h4>
-
-          {/* Verification Status */}
-          <Status buildStatus={buildStatus} />
         </div>
 
         {/* Program Address */}
-
         <h5 className="overflow-hidden text-ellipsis text-sm">{address}</h5>
       </div>
     </Link>
@@ -36,7 +26,6 @@ interface ProgramMiniCardProps {
   address: string;
   verified: boolean;
   id: string | boolean;
-  buildStatus: string;
 }
 
 export default memo(ProgramMiniCard);
