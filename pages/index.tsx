@@ -30,7 +30,6 @@ function loadMorePrograms(programs, amount, buildType = false) {
         address={programs[i].address}
         verified={programs[i].verified}
         id={buildType && programs[i].id}
-        buildStatus={programs[i].buildStatus}
       />
     );
   }

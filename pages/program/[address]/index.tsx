@@ -16,11 +16,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   const paths: any[] = [];
 
-  // Patch for weird issue, will fix later
   for (let i = 0; i < programs.length; i++) {
+    // Patch for weird issue, will fix later
     if (
-      programs[i].adress !== "So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo" ||
-      programs[i].adress !== "ninaN2tm9vUkxoanvGcNApEeWiidLMM2TdBX8HoJuL4"
+      programs[i].address === "So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo" ||
+      programs[i].address === "ninaN2tm9vUkxoanvGcNApEeWiidLMM2TdBX8HoJuL4"
     )
       continue;
 
@@ -32,7 +32,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 
   // All missing paths are going to be server-side rendered and cached
-  return { paths, fallback: "blocking" };
+  return { paths, fallback: false };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -43,13 +43,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/program/${params.address}/latest`
   );
 
-  let selectedBuild = builds[0];
+  let selectedBuild = builds[0] || {};
 
   // Find selected build artifacts
-  const artifacts = await fetch(
+  selectedBuild.artifacts = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/build/${selectedBuild.id}/artifacts`
   );
-  selectedBuild.artifacts = artifacts;
 
   builds = builds.map((build) => {
     return {
