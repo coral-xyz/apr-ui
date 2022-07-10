@@ -27,7 +27,9 @@ function Builds({ builds }: BuildsProps) {
                     <div className="mx-auto md:w-min">
                       <div className="flex flex-col gap-4">
                         <div className="justifystart flex gap-2 md:gap-4">
-                          <CalendarIcon height="26" />
+                          <span className="h-6 w-6">
+                            <CalendarIcon />
+                          </span>
                           <div className="prose-md prose-gray text-sm font-medium">
                             Publish {FormatDate(build.updated_at)}
                           </div>
