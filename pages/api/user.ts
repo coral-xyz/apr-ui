@@ -1,11 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import fetch from "isomorphic-unfetch";
+import { withSentry } from "@sentry/nextjs";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession({ req });
 
   if (req.method === "GET") {
@@ -51,3 +49,5 @@ export default async function handler(
     }
   }
 }
+
+export default withSentry(handler);
