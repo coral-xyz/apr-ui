@@ -118,6 +118,8 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
                 className="max-w-sm"
                 alt="hero"
                 src="/banner-text.png"
+                width="400"
+                height="300"
                 priority
               />
             </div>
