@@ -1,85 +1,66 @@
 import { memo } from "react";
-import { Card, CardActionArea, Stack } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import InputIcon from "@mui/icons-material/Input";
+import { CalendarIcon } from "@heroicons/react/outline";
+import { KeyIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import Status from "../status";
 import FormatDate from "../../utils/format-date";
 
-const Item = styled(CardActionArea)(({ theme }) => ({
-  padding: theme.spacing(2),
-  color: theme.palette.text.secondary,
-  display: "flex",
-  justifyContent: "flex-start",
-}));
-
 function Builds({ builds }: BuildsProps) {
   return (
-    <Stack spacing={3} sx={{ paddingTop: 3 }}>
-      {builds.map((build) => {
-        return (
-          <Link
-            key={build.id}
-            href={`/program/${build.address}/build/${build.id}`}
-            passHref
-          >
-            <Card elevation={2}>
-              <Item
-                sx={{
-                  display: "flex",
-                  height: 88,
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box sx={{ display: "flex" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      gap: 2,
-                      alignItems: "center",
-                      marginRight: 5,
-                      cursor: "pointer",
-                      paddingLeft: 2,
-                      paddingRight: 2,
-                    }}
-                  >
-                    <Typography variant="h6">Build #{build.id}</Typography>
-                  </Box>
+    <div className="overflow-hidden rounded-md pt-4 pl-4 pr-4">
+      <ul role="list" className="divide-y-2 divide-gray-200">
+        {builds.map((build) => {
+          return (
+            <Link
+              key={build.id}
+              href={`/program/${build.address}/build/${build.id}`}
+              passHref
+            >
+              <div className=" overflow-hidden rounded-lg   bg-white">
+                <div className="px-4">
+                  <div className=" container m-3 mx-auto flex flex-col  justify-evenly gap-4 rounded-md p-2 align-baseline  text-[#666666] shadow-md sm:px-6 md:flex-row md:align-middle lg:px-8">
+                    <div className="md:w-xs mb-2 flex flex-col justify-center">
+                      <h6 className="prose-zinc  font-medium   lg:prose-lg">
+                        Build #{build.id}
+                      </h6>
+                    </div>
+                    <div className="mx-auto md:w-min">
+                      <div className="flex flex-col gap-4">
+                        <div className="justifystart flex gap-2 md:gap-4">
+                          <span className="h-6 w-6">
+                            <CalendarIcon />
+                          </span>
+                          <div className="prose-md prose-gray text-sm font-medium">
+                            Publish {FormatDate(build.updated_at)}
+                          </div>
+                        </div>
 
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                  >
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <CalendarMonthIcon />
-                      <Typography variant="subtitle2">
-                        Publish {FormatDate(build.updated_at)}
-                      </Typography>
-                    </Box>
+                        <div className="flex gap-4 ">
+                          {build.sha256 && (
+                            <>
+                              <span className="h-6 w-6">
+                                <KeyIcon />
+                              </span>
+                              <div className="prose-md prose-gray text-sm font-medium">
+                                {build.sha256}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
 
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      {build.sha256 && (
-                        <>
-                          <InputIcon />
-                          <Typography variant="subtitle2">
-                            {build.sha256}
-                          </Typography>
-                        </>
-                      )}
-                    </Box>
-                  </Box>
-                </Box>
-                <Box>
-                  <Status buildStatus={build.buildStatus} />
-                </Box>
-              </Item>
-            </Card>
-          </Link>
-        );
-      })}
-    </Stack>
+                    <div className="flex flex-col justify-center">
+                      <Status buildStatus={build.buildStatus} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
 
