@@ -58,8 +58,6 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
           ];
         }
 
-        console.log("filter", accountFilter);
-
         // Get all accounts
         const accounts = await program.account[name].all(accountFilter);
 
