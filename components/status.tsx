@@ -10,7 +10,7 @@ function Status({ buildStatus }: StatusProps) {
   return (
     <div>
       {buildStatus === "verified" && (
-        <span className="inline-flex items-center gap-1 rounded-md bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800 md:ml-16">
+        <span className="inline-flex items-center gap-1 rounded-md bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800">
           <CheckCircleIcon className="h-5 w-5" />
           Verified
         </span>

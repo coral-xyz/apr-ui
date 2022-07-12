@@ -42,7 +42,12 @@ function Source({ url, name, readme }: SourceProps) {
       {name !== "README.md" ? (
         <>
           <div className="flex justify-end rounded-t-md border border-b-0 border-slate-300 bg-slate-100">
-            <a className="mr-2 p-2 tracking-wide" href={url} target="_blank" rel="noreferrer">
+            <a
+              className="mr-2 p-2 tracking-wide"
+              href={url}
+              target="_blank"
+              rel="noreferrer"
+            >
               Raw
             </a>
           </div>

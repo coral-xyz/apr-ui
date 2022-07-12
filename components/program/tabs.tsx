@@ -1,4 +1,10 @@
-import { ClockIcon, CodeIcon, DocumentTextIcon, TerminalIcon } from "@heroicons/react/solid";
+import {
+  ClockIcon,
+  CodeIcon,
+  DatabaseIcon,
+  DocumentTextIcon,
+  TerminalIcon,
+} from "@heroicons/react/solid";
 import { memo } from "react";
 import useSWR from "swr";
 import dynamic from "next/dynamic";
@@ -9,11 +15,13 @@ const Readme = dynamic(() => import("./readme"));
 const Builds = dynamic(() => import("./builds"));
 const IdlViewer = dynamic(() => import("./idl-viewer"), { ssr: false });
 const SourceFiles = dynamic(() => import("./source-files"));
+const AccountsData = dynamic(() => import("./accounts-data"));
 
 const tabs = [
   { name: "Readme", icon: DocumentTextIcon },
   { name: "Explorer", icon: CodeIcon },
   { name: "IDL", icon: TerminalIcon },
+  { name: "Accounts Data", icon: DatabaseIcon },
   { name: "Builds", icon: ClockIcon },
 ];
 
@@ -29,20 +37,22 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
 
   return (
     <div>
-      <div className="sm:hidden">
-        <label htmlFor="tabs" className="sr-only">
-          Select a tab
-        </label>
-        <select
-          id="tabs"
-          name="tabs"
-          className="block w-full rounded-md border-gray-300 focus:border-amber-500 focus:ring-amber-500"
-          defaultValue={tabs.find((tab) => tab.name === selectedTab).name}
-        >
-          {tabs.map((tab) => (
-            <option key={tab.name}>{tab.name}</option>
-          ))}
-        </select>
+      <div className="sm:hidden ">
+        <div className="border-b border-gray-200 pb-4">
+          <label htmlFor="tabs" className="sr-only">
+            Select a tab
+          </label>
+          <select
+            id="tabs"
+            name="tabs"
+            className="block w-full rounded-md border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+            defaultValue={tabs.find((tab) => tab.name === selectedTab).name}
+          >
+            {tabs.map((tab) => (
+              <option key={tab.name}>{tab.name}</option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="hidden sm:block">
         <div className="border-b border-gray-200">
@@ -51,9 +61,13 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
               <button
                 key={tab.name}
                 onClick={() => {
-                  router.push(`/program/${router.query.address}?tab=${tab.name}`);
+                  router.push(
+                    `/program/${router.query.address}?tab=${tab.name}`
+                  );
                 }}
-                disabled={(tab.name === "IDL" && !idl) || (tab.name === "Instructions" && !idl)}
+                disabled={
+                  (tab.name === "IDL" || tab.name === "Accounts Data") && !idl
+                }
                 className={classNames(
                   tab.name === selectedTab
                     ? "border-amber-500 text-amber-600"
@@ -67,13 +81,15 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
                     tab.name === selectedTab
                       ? "text-amber-500"
                       : "text-gray-400 group-hover:text-gray-500",
-                    tab.name === "IDL" && !idl && "text-gray-300 group-hover:text-gray-300",
+                    (tab.name === "IDL" || tab.name === "Accounts Data") &&
+                      !idl &&
+                      "text-gray-300 group-hover:text-gray-300",
                     "-ml-0.5 mr-2 h-5 w-5"
                   )}
                   aria-hidden="true"
                 />
                 <span>{tab.name}</span>
-                {tab.name === "Instructions" && (
+                {tab.name === "Accounts Data" && (
                   <span className="ml-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
                     New
                   </span>
@@ -89,7 +105,12 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
       {selectedTab === "Explorer" && (
         <SourceFiles name={selectedBuild.name} files={files} readme={readme} />
       )}
-      {selectedTab === "IDL" && idl && <IdlViewer data={idl} url={selectedBuild.artifacts.idl} />}
+      {selectedTab === "IDL" && idl && (
+        <IdlViewer data={idl} url={selectedBuild.artifacts.idl} />
+      )}
+      {selectedTab === "Accounts Data" && idl && (
+        <AccountsData idl={idl} programID={selectedBuild.address} />
+      )}
     </div>
   );
 }
