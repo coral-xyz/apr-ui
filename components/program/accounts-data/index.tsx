@@ -69,7 +69,8 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
           return account.publicKey;
         });
       } catch (e) {
-        console.error("Error:", e);
+        console.log("Error:", e);
+        return [];
       }
     },
     [defineProgram, filter]
@@ -84,11 +85,19 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
         // normalize account name
         const name = accountName.charAt(0).toLowerCase() + accountName.slice(1);
 
-        return await program.account[name].fetchMultiple(
-          pks.slice(currentPage, currentPage + pageSize)
-        );
+        // Check if I need to find an specific account or all accounts
+        if (filter.address && filter.address.length === 44) {
+          const data = await program.account[name].fetch(filter.address);
+          setAccountsLength(1);
+          return data;
+        } else {
+          return await program.account[name].fetchMultiple(
+            pks.slice(currentPage, currentPage + pageSize)
+          );
+        }
       } catch (e) {
-        console.error("Error:", e);
+        console.log("Error:", e);
+        return [];
       }
     },
     [defineProgram, getAccounts, currentPage, pageSize]
@@ -189,3 +198,28 @@ interface AccountsDataProps {
 }
 
 export default memo(AccountsData);
+
+// {
+//   "publicKey": "HWx6Bcau9SJGcdX5PYTeFGzrhwVcFRrj2D1jadicLVkj",
+//     "account": {
+//   "realm": "78TbURwqF71Qk4w1Xp6Jd2gaoQb6EC7yKBh5xDJmq6qh",
+//       "governingTokenMint": "JET6zMJWkCN9tpRT2v2jfAmm5VnQFDpUBCyaKojmGtz",
+//       "owner": "CNEnSergUBN37aAXYTAGxKScv46eS1zTBfettQkKMhJ9",
+//       "voterWeight": "1e2033af",
+//       "voterWeightExpiry": null,
+//       "weightAction": {
+//     "castVote": {}
+//   },
+//   "weightActionTarget": null,
+//       "reserved": [
+//     0,
+//     0,
+//     0,
+//     0,
+//     0,
+//     0,
+//     0,
+//     0
+//   ]
+// }
+// }
