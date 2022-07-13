@@ -29,6 +29,7 @@ function AccountsDataFilter({ filter, setFilter }: AccountsDataFilterProps) {
             <RadioGroup.Option
               key={option}
               value={option}
+              onClick={() => setFilter({})}
               className={({ active, checked }) =>
                 classNames(
                   "cursor-pointer focus:outline-none",

@@ -80,17 +80,18 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
     async (accountName: string): Promise<any> => {
       try {
         const program = await defineProgram();
-        const pks = await getAccounts(accountName);
 
         // normalize account name
         const name = accountName.charAt(0).toLowerCase() + accountName.slice(1);
 
         // Check if I need to find an specific account or all accounts
-        if (filter.address && filter.address.length === 44) {
+        if (filter.address) {
           const data = await program.account[name].fetch(filter.address);
           setAccountsLength(1);
+          setPages(1);
           return data;
         } else {
+          const pks = await getAccounts(accountName);
           return await program.account[name].fetchMultiple(
             pks.slice(currentPage, currentPage + pageSize)
           );
