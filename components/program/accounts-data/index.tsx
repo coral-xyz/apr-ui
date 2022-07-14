@@ -208,28 +208,3 @@ interface AccountsDataProps {
 }
 
 export default memo(AccountsData);
-
-// {
-//   "publicKey": "HWx6Bcau9SJGcdX5PYTeFGzrhwVcFRrj2D1jadicLVkj",
-//     "account": {
-//   "realm": "78TbURwqF71Qk4w1Xp6Jd2gaoQb6EC7yKBh5xDJmq6qh",
-//       "governingTokenMint": "JET6zMJWkCN9tpRT2v2jfAmm5VnQFDpUBCyaKojmGtz",
-//       "owner": "CNEnSergUBN37aAXYTAGxKScv46eS1zTBfettQkKMhJ9",
-//       "voterWeight": "1e2033af",
-//       "voterWeightExpiry": null,
-//       "weightAction": {
-//     "castVote": {}
-//   },
-//   "weightActionTarget": null,
-//       "reserved": [
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0
-//   ]
-// }
-// }

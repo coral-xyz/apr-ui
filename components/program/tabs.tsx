@@ -13,9 +13,9 @@ import fetcher from "../../utils/fetcher";
 
 const Readme = dynamic(() => import("./readme"));
 const Builds = dynamic(() => import("./builds"));
-const IdlViewer = dynamic(() => import("./idl-viewer"), { ssr: false });
+const IdlViewer = dynamic(() => import("./idl-viewer"));
 const SourceFiles = dynamic(() => import("./source-files"));
-const AccountsData = dynamic(() => import("./accounts-data"));
+const AccountsData = dynamic(() => import("./accounts-data/index"));
 
 const tabs = [
   { name: "Readme", icon: DocumentTextIcon },
@@ -34,6 +34,8 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
   const { data: idl } = useSWR(selectedBuild.artifacts.idl as string, fetcher);
 
   const selectedTab = router.query.tab || "Readme";
+  const idlHasAccount =
+    idl && Array.isArray(idl.accounts) && idl.accounts.length > 0;
 
   return (
     <div>
@@ -66,7 +68,8 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
                   );
                 }}
                 disabled={
-                  (tab.name === "IDL" || tab.name === "Accounts Data") && !idl
+                  (tab.name === "IDL" && !idl) ||
+                  (tab.name === "Accounts Data" && !idlHasAccount)
                 }
                 className={classNames(
                   tab.name === selectedTab
@@ -108,7 +111,7 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
       {selectedTab === "IDL" && idl && (
         <IdlViewer data={idl} url={selectedBuild.artifacts.idl} />
       )}
-      {selectedTab === "Accounts Data" && idl && (
+      {selectedTab === "Accounts Data" && idl && idl.accounts && (
         <AccountsData idl={idl} programID={selectedBuild.address} />
       )}
     </div>
