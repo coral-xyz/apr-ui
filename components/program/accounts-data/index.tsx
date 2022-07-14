@@ -75,7 +75,6 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
         });
       } catch (e) {
         console.log("Error:", e);
-        return [];
       }
     },
     [defineProgram, filter]
@@ -104,7 +103,6 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
         }
       } catch (e) {
         console.log("Error:", e);
-        return [];
       }
     },
     [defineProgram, getAccounts, currentPage, pageSize]
