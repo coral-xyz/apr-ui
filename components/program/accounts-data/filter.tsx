@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo } from "react";
 import { RadioGroup } from "@headlessui/react";
 
 const filterOptions = ["address", "memcmp"];
@@ -7,18 +7,14 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function AccountsDataFilter({ filter, setFilter }: AccountsDataFilterProps) {
-  const [option, setOption] = useState("");
-
+function AccountsDataFilter({
+  filter,
+  setFilter,
+  option,
+  setOption,
+}: AccountsDataFilterProps) {
   return (
     <div>
-      {/*<label*/}
-      {/*  htmlFor="offset"*/}
-      {/*  className="mt-2 block text-center text-base font-medium text-gray-500"*/}
-      {/*>*/}
-      {/*  Filter by:*/}
-      {/*</label>*/}
-
       <div className="mb-5 flex items-center justify-between">
         <h2 className="text-sm font-medium text-gray-600">Filter using:</h2>
       </div>
@@ -106,7 +102,9 @@ function AccountsDataFilter({ filter, setFilter }: AccountsDataFilterProps) {
 
 interface AccountsDataFilterProps {
   filter: any;
+  option: string;
   setFilter: (filter: any) => void;
+  setOption: (option: string) => void;
 }
 
 export default memo(AccountsDataFilter);

@@ -8,13 +8,17 @@ import { CollectionIcon } from "@heroicons/react/solid";
 
 function AccountsData({ idl, programID }: AccountsDataProps) {
   const [selectedAccount, setSelectedAccount] = useState<string>();
-  const [filter, setFilter] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
+  // Pagination
   const [accountsLength, setAccountsLength] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
   const [pages, setPages] = useState<number>();
   const [currentPage, setCurrentPage] = useState<number>(0);
+  // Filter
+  const [option, setOption] = useState("");
+  const [filter, setFilter] = useState<any>({});
 
+  // Initialize Anchor program
   const defineProgram = useCallback(async (): Promise<any> => {
     try {
       // TODO: env var
@@ -38,6 +42,7 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
     }
   }, [idl, programID]);
 
+  // Find all accounts
   const getAccounts = useCallback(
     async (accountName: string): Promise<any> => {
       try {
@@ -76,6 +81,7 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
     [defineProgram, filter]
   );
 
+  // Get data for selected accounts
   const getData = useCallback(
     async (accountName: string): Promise<any> => {
       try {
@@ -127,7 +133,12 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
           />
         </div>
         <div>
-          <AccountsDataFilter filter={filter} setFilter={setFilter} />
+          <AccountsDataFilter
+            filter={filter}
+            setFilter={setFilter}
+            option={option}
+            setOption={setOption}
+          />
         </div>
       </div>
 
