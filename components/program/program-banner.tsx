@@ -9,11 +9,10 @@ const Status = dynamic(() => import("../status"));
 function ProgramCard({
   name,
   address,
-  verified,
   buildId,
-  buildStatus,
   selectedBuild,
   latest,
+  buildStatus,
 }: ProgramCardProps) {
   return (
     <>
@@ -66,11 +65,7 @@ function ProgramCard({
             <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
               Status
             </h5>
-            {verified ? (
-              <Status buildStatus="verified" />
-            ) : (
-              <Status buildStatus="failed" />
-            )}
+            <Status buildStatus={buildStatus} />
           </div>
 
           {/* Last Updated */}
@@ -124,7 +119,6 @@ interface ProgramCardProps {
   name: string;
   buildId: number;
   address: string;
-  verified: boolean;
   buildStatus: string;
   selectedBuild: any;
   latest: boolean;
