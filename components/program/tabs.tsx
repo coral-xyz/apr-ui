@@ -34,8 +34,7 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
   const { data: idl } = useSWR(selectedBuild.artifacts.idl as string, fetcher);
 
   const selectedTab = router.query.tab || "Readme";
-  const idlHasAccount =
-    idl && Array.isArray(idl.accounts) && idl.accounts.length > 0;
+  const idlHasAccount = idl && Array.isArray(idl.accounts) && idl.accounts.length > 0;
 
   return (
     <div>
@@ -63,13 +62,10 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
               <button
                 key={tab.name}
                 onClick={() => {
-                  router.push(
-                    `/program/${router.query.address}?tab=${tab.name}`
-                  );
+                  router.push(`/program/${router.query.address}?tab=${tab.name}`);
                 }}
                 disabled={
-                  (tab.name === "IDL" && !idl) ||
-                  (tab.name === "Accounts Data" && !idlHasAccount)
+                  (tab.name === "IDL" && !idl) || (tab.name === "Accounts Data" && !idlHasAccount)
                 }
                 className={classNames(
                   tab.name === selectedTab
@@ -93,7 +89,12 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
                 />
                 <span>{tab.name}</span>
                 {tab.name === "Accounts Data" && (
-                  <span className="ml-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                  <span
+                    className={classNames(
+                      "ml-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800",
+                      !idl?.accounts && "opacity-50"
+                    )}
+                  >
                     New
                   </span>
                 )}
@@ -108,9 +109,7 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
       {selectedTab === "Explorer" && (
         <SourceFiles name={selectedBuild.name} files={files} readme={readme} />
       )}
-      {selectedTab === "IDL" && idl && (
-        <IdlViewer data={idl} url={selectedBuild.artifacts.idl} />
-      )}
+      {selectedTab === "IDL" && idl && <IdlViewer data={idl} url={selectedBuild.artifacts.idl} />}
       {selectedTab === "Accounts Data" && idl && idl.accounts && (
         <AccountsData idl={idl} programID={selectedBuild.address} />
       )}

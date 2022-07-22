@@ -29,10 +29,18 @@ function Status({ buildStatus }: StatusProps) {
           Build Aborted
         </span>
       )}
+
       {buildStatus === "building" && (
         <span className="inline-flex items-center gap-1 rounded-md bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800">
           <ClockIcon className="h-5 w-5" />
           Building
+        </span>
+      )}
+
+      {buildStatus === "built" && (
+        <span className="inline-flex items-center gap-1 rounded-md bg-gray-200 px-2.5 py-0.5 text-sm font-medium text-gray-800">
+          <ClockIcon className="h-5 w-5" />
+          Built
         </span>
       )}
     </div>

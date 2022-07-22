@@ -105,13 +105,17 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
         console.log("Error:", e);
       }
     },
-    [defineProgram, getAccounts, currentPage, pageSize]
+    [defineProgram, getAccounts, currentPage, pageSize, filter.address]
   );
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getData(selectedAccount);
-      setData(data);
+      try {
+        const data = await getData(selectedAccount);
+        setData(data);
+      } catch (e) {
+        console.log("Error:", e);
+      }
     }
     if (selectedAccount) fetchData();
   }, [getData, selectedAccount, filter]);

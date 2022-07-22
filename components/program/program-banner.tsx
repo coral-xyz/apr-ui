@@ -9,10 +9,8 @@ const Status = dynamic(() => import("../status"));
 function ProgramCard({
   name,
   address,
-  buildId,
   selectedBuild,
   latest,
-  buildStatus,
 }: ProgramCardProps) {
   return (
     <>
@@ -39,7 +37,7 @@ function ProgramCard({
             {/* Tags */}
             <div className="flex flex-row gap-2">
               <span className="rounded-lg bg-orange-100  px-2 py-1 text-sm font-medium tracking-wide text-gray-500">
-                build #{buildId}
+                build #{selectedBuild.id}
               </span>
               {latest && (
                 <span className="rounded-lg bg-orange-100 px-2 py-1 text-sm font-medium tracking-wide text-gray-500">
@@ -65,7 +63,7 @@ function ProgramCard({
             <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
               Status
             </h5>
-            <Status buildStatus={buildStatus} />
+            <Status buildStatus={selectedBuild.buildStatus} />
           </div>
 
           {/* Last Updated */}
@@ -117,9 +115,7 @@ function ProgramCard({
 
 interface ProgramCardProps {
   name: string;
-  buildId: number;
   address: string;
-  buildStatus: string;
   selectedBuild: any;
   latest: boolean;
 }

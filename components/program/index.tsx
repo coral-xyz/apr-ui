@@ -18,10 +18,8 @@ function Program({
       <ProgramBanner
         name={program.name}
         address={program.address}
-        buildId={selectedBuild.id}
         selectedBuild={selectedBuild}
         latest={latestBuild}
-        buildStatus={selectedBuild.buildStatus}
       />
 
       <Tabs

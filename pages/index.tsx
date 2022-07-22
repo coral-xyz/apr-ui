@@ -4,7 +4,6 @@ import fetch from "../utils/fetcher";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import Layout from "../components/layout";
-import buildStatus from "../utils/build-status";
 import { SearchIcon } from "@heroicons/react/outline";
 
 const Search = dynamic(() => import("../components/search"));
@@ -28,7 +27,6 @@ function loadMorePrograms(programs, amount, buildType = false) {
         key={programs[i].id}
         name={programs[i].name}
         address={programs[i].address}
-        verified={programs[i].verified}
         id={buildType && programs[i].id}
       />
     );
@@ -50,30 +48,12 @@ export async function getStaticProps({}: GetStaticProps) {
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
-  // Find if the last build for a program is verified
-  for (let i = 0; i < programs.length; i++) {
-    const lastBuild = builds.find(
-      (element) => element.address === programs[i].address
-    );
-
-    if (lastBuild === undefined) {
-      programs[i].verified = false;
-      continue;
-    }
-
-    programs[i].buildStatus = buildStatus(lastBuild);
-
-    programs[i].verified = lastBuild.verified === "Verified";
-  }
-
   // Reduce data size for UI
   const justUpdated = builds.map((build) => {
     return {
       id: build.id,
       name: build.name,
       address: build.address,
-      verified: build.verified === "Verified",
-      buildStatus: buildStatus(build),
     };
   });
 
@@ -83,8 +63,6 @@ export async function getStaticProps({}: GetStaticProps) {
       id: program.id,
       name: program.name,
       address: program.address,
-      verified: program.verified,
-      buildStatus: program.buildStatus || false,
     });
   }
 

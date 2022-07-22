@@ -5,7 +5,6 @@ import markdownToHtml from "../../../utils/markdown";
 import dynamic from "next/dynamic";
 import Layout from "../../../components/layout";
 import buildStatus from "../../../utils/build-status";
-import verificationStatus from "../../../utils/verification-status";
 
 const ProgramComponent = dynamic(() => import("../../../components/program"));
 
@@ -50,15 +49,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/build/${selectedBuild.id}/artifacts`
   );
 
-  builds = builds.map((build) => {
-    return {
-      buildStatus: buildStatus(build) || false,
+  let slimBuilds = [];
+  for await (const build of builds) {
+    const status = await buildStatus(build, false);
+
+    slimBuilds.push({
+      buildStatus: status,
       id: build.id,
       address: build.address,
       updated_at: build.updated_at,
       sha256: build.sha256,
-    };
-  });
+    });
+  }
 
   // If the program contains a Readme, we need to process it
   let readmeUrl: string | boolean = false;
@@ -77,14 +79,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
   readme = await markdownToHtml(readme || "");
 
-  selectedBuild.buildStatus = buildStatus(selectedBuild);
-
-  program.verified = await verificationStatus(selectedBuild.address);
+  selectedBuild.buildStatus = await buildStatus(selectedBuild, true);
 
   return {
     props: {
       program,
-      builds,
+      builds: slimBuilds,
       selectedBuild,
       readme,
       files: selectedBuild?.descriptor || null,

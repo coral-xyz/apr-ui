@@ -11,8 +11,8 @@
   "dependencies": {
     "@sentry/nextjs": "^7.7.0",
     "@sentry/tracing": "^7.7.0",
-    "next": "^12.2.2",
-    "next-auth": "4.10.1",
+    "next": "^12.2.3",
+    "next-auth": "4.10.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -33,7 +33,7 @@
     "@solana/wallet-adapter-react": "^0.15.8",
     "@solana/wallet-adapter-react-ui": "^0.9.10",
     "@solana/wallet-adapter-wallets": "^0.16.8",
-    "@solana/web3.js": "^1.48.0",
+    "@solana/web3.js": "^1.50.0",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.5.2",
     "@tailwindcss/typography": "^0.5.4",
@@ -42,7 +42,7 @@
     "autoprefixer": "^10.4.7",
     "bs58": "^5.0.0",
     "eslint": "^8.20.0",
-    "eslint-config-next": "^12.2.2",
+    "eslint-config-next": "^12.2.3",
     "eslint-config-prettier": "^8.5.0",
     "isomorphic-unfetch": "^3.1.0",
     "next-plausible": "^3.2.0",

@@ -8,7 +8,7 @@ function ProgramMiniCard({ name, address, id }: ProgramMiniCardProps) {
 
   return (
     <Link href={programUrl}>
-      <div className="flex w-96 flex-col justify-between gap-2 rounded-lg border border-gray-100 bg-gray-100 py-5 px-4 shadow-md hover:border-slate-100 hover:bg-slate-100 lg:w-full">
+      <div className="flex w-96 cursor-pointer flex-col justify-between gap-2 rounded-lg border border-gray-100 bg-gray-100 py-5 px-4 shadow-md hover:border-slate-100 hover:bg-slate-100 lg:w-full">
         <div className="flex flex-row justify-between">
           {/* Program Name */}
           <h4 className="text-lg font-medium">{name}</h4>
@@ -24,7 +24,6 @@ function ProgramMiniCard({ name, address, id }: ProgramMiniCardProps) {
 interface ProgramMiniCardProps {
   name: string;
   address: string;
-  verified: boolean;
   id: string | boolean;
 }
 

@@ -42,21 +42,20 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   );
 
   // Find selected build artifacts
-  const artifacts = await fetch(
+  selectedBuild.artifacts = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/build/${selectedBuild.id}/artifacts`
   );
-  selectedBuild.artifacts = artifacts;
 
-  builds = builds.map((build) => {
-    return {
-      verified: build.verified,
-      buildStatus: buildStatus(build),
+  let slimBuilds = [];
+  for await (const build of builds) {
+    slimBuilds.push({
+      buildStatus: await buildStatus(build, false),
       id: build.id,
       address: build.address,
       updated_at: build.updated_at,
       sha256: build.sha256,
-    };
-  });
+    });
+  }
 
   // If the program contains a Readme, we need to process it
   let readmeUrl: string | boolean = false;
@@ -75,16 +74,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
   readme = await markdownToHtml(readme || "");
 
-  // TODO: delete
-  program.verified = selectedBuild.verified === "Verified";
-
-  program.buildStatus = buildStatus(selectedBuild);
-  selectedBuild.buildStatus = buildStatus(selectedBuild);
+  selectedBuild.buildStatus = await buildStatus(selectedBuild, true);
 
   return {
     props: {
       program,
-      builds,
+      builds: slimBuilds,
       selectedBuild,
       readme,
       files: selectedBuild?.descriptor || null,
