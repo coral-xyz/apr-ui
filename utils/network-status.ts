@@ -1,5 +1,5 @@
 import { Connection, PublicKey } from "@solana/web3.js";
-import anchor from "@project-serum/anchor";
+import * as anchor from "@project-serum/anchor";
 
 /**
  * Returns the current network status.
@@ -21,6 +21,7 @@ export default async function networkStatus(
 
     if (result === null) return false;
   } catch (e) {
+    console.log("Error: ", e);
     return false;
   }
 

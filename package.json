@@ -27,7 +27,7 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.91",
     "@mui/material": "^5.9.1",
-    "@mui/x-data-grid": "^5.13.1",
+    "@mui/x-data-grid": "^5.14.0",
     "@project-serum/anchor": "^0.25.0",
     "@solana/wallet-adapter-base": "^0.9.9",
     "@solana/wallet-adapter-react": "^0.15.8",

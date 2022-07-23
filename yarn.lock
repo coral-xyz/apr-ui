@@ -438,10 +438,10 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/x-data-grid@^5.13.1":
-  version "5.13.1"
-  resolved "https://registry.yarnpkg.com/@mui/x-data-grid/-/x-data-grid-5.13.1.tgz#401ff147bebef6fea085a17a536be5774fa6cd50"
-  integrity sha512-4DqjOBfiyW8IBpckiZis3BuhliVMl72pv7dC9yfET9WUSZ5m3KlH63W4dckKDDYgDHjdUJqAjHAnLpqNUP/83Q==
+"@mui/x-data-grid@^5.14.0":
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-data-grid/-/x-data-grid-5.14.0.tgz#4ea567005b2ede6f6c82e81ddeb6847f10ad8221"
+  integrity sha512-4PT8z6+k9tQNVaDC/wuPxtlPYDO+M58g8jE79Zf2UUiHhRqx700Vxy3qdbC1fr8VkDkmfGQpNMFewg82iInXJQ==
   dependencies:
     "@babel/runtime" "^7.18.6"
     "@mui/utils" "^5.4.1"

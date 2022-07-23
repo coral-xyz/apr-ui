@@ -11,6 +11,10 @@ const ProgramComponent = dynamic(
 );
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  if (process.env.SKIP_BUILD_STATIC_GENERATION) {
+    return { paths: [], fallback: "blocking" };
+  }
+
   const builds: any[] = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v0/builds/latest`
   );
@@ -25,7 +29,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   });
 
   // All missing paths are going to be server-side rendered and cached
-  return { paths, fallback: false };
+  return { paths, fallback: "blocking" };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
