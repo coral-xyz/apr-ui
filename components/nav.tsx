@@ -79,7 +79,12 @@ function Nav() {
                   {/* Logo */}
                   <Link href="/">
                     <div className="flex cursor-pointer">
-                      <Image alt="" src="/logo.png" width="120px" height="40px" />
+                      <Image
+                        alt=""
+                        src="/logo.png"
+                        width="120px"
+                        height="40px"
+                      />
                     </div>
                   </Link>
                 </div>
@@ -94,8 +99,13 @@ function Nav() {
                 justify-between rounded-md border border-gray-700 bg-gray-700 px-5  shadow focus:outline-none"
                       >
                         <div className="flex flex-row items-center gap-2 text-gray-500">
-                          <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          <span className="text-gray-400">Search by name or address</span>
+                          <SearchIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          <span className="text-gray-400">
+                            Search by name or address
+                          </span>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
                           <kbd className="inline-flex items-center rounded border border-gray-500 px-2 font-sans text-sm font-medium text-gray-400">
@@ -113,7 +123,7 @@ function Nav() {
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://anchor-lang.com?utm_source=apr.dev"
-                    className="flex items-center gap-1 font-medium text-gray-50 hover:text-gray-100"
+                    className="hidden items-center gap-1 font-medium text-gray-50 hover:text-gray-100 sm:flex"
                   >
                     Docs
                     <ExternalLinkIcon className="h-5 w-5" aria-hidden="true" />
@@ -195,7 +205,9 @@ function Nav() {
                                       "block flex w-full flex-row gap-2 px-4 py-2 text-sm text-gray-900"
                                     )}
                                     onClick={() => {
-                                      navigator.clipboard.writeText(publicKey.toBase58());
+                                      navigator.clipboard.writeText(
+                                        publicKey.toBase58()
+                                      );
                                     }}
                                   >
                                     <DuplicateIcon className="h-5 w-5" />
@@ -225,20 +237,25 @@ function Nav() {
                   )}
 
                   {/* Mobile menu button */}
-                  <div className="flex lg:hidden">
-                    <Disclosure.Button
-                      className="inline-flex items-center
+                  {status === "authenticated" && (
+                    <div className="flex lg:hidden">
+                      <Disclosure.Button
+                        className="inline-flex items-center
                 justify-center rounded-md p-2 text-gray-100 hover:bg-gray-700
                 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                    >
-                      <span className="sr-only">Open main menu</span>
-                      {open ? (
-                        <XIcon className="block h-6 w-6" aria-hidden="true" />
-                      ) : (
-                        <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-                      )}
-                    </Disclosure.Button>
-                  </div>
+                      >
+                        <span className="sr-only">Open main menu</span>
+                        {open ? (
+                          <XIcon className="block h-6 w-6" aria-hidden="true" />
+                        ) : (
+                          <MenuIcon
+                            className="block h-6 w-6"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </Disclosure.Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -249,7 +266,9 @@ function Nav() {
                 <div className="mt-3 space-y-1">
                   <Disclosure.Button className="ml-3 block w-full text-left">
                     <div className="flex flex-col tracking-wide">
-                      <span className="text-sm text-gray-300">Connected as</span>
+                      <span className="text-sm text-gray-300">
+                        Connected as
+                      </span>
                       <span className="text-gray-50">
                         {publicKey && (
                           <>
@@ -300,7 +319,9 @@ function Nav() {
           </>
         )}
       </Disclosure>
-      {showSearch && <Search open={showSearch} setOpen={setShowSearch} programs={data} />}
+      {showSearch && (
+        <Search open={showSearch} setOpen={setShowSearch} programs={data} />
+      )}
     </>
   );
 }

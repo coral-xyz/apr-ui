@@ -33,7 +33,7 @@ export default function MyApp(props: MyAppProps) {
             <Nav />
             <CacheProvider value={emotionCache}>
               <ThemeProvider theme={theme}>
-                <div className="mx-auto max-w-7xl px-10 pt-8 pb-20">
+                <div className="mx-auto max-w-7xl pt-8 pb-20">
                   <Component {...pageProps} />
                 </div>
               </ThemeProvider>

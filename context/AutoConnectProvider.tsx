@@ -14,8 +14,10 @@ export function useAutoConnect(): AutoConnectContextState {
   return useContext(AutoConnectContext);
 }
 
-export const AutoConnectProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [autoConnect, setAutoConnect] = useLocalStorage("autoConnect", true);
+export const AutoConnectProvider: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [autoConnect, setAutoConnect] = useLocalStorage("autoConnect", false);
 
   return (
     <AutoConnectContext.Provider value={{ autoConnect, setAutoConnect }}>
