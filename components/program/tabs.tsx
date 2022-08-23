@@ -1,40 +1,46 @@
-import {
-  ClockIcon,
-  CodeIcon,
-  DatabaseIcon,
-  DocumentTextIcon,
-  TerminalIcon,
-} from "@heroicons/react/solid";
 import { memo } from "react";
 import useSWR from "swr";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import fetcher from "../../utils/fetcher";
+import { Address, Idl } from "@project-serum/anchor";
 
 const Readme = dynamic(() => import("./readme"));
 const Builds = dynamic(() => import("./builds"));
 const IdlViewer = dynamic(() => import("./idl-viewer"));
 const SourceFiles = dynamic(() => import("./source-files"));
-const AccountsData = dynamic(() => import("./accounts-data/index"));
-
-const tabs = [
-  { name: "Readme", icon: DocumentTextIcon },
-  { name: "Explorer", icon: CodeIcon },
-  { name: "IDL", icon: TerminalIcon },
-  { name: "Accounts Data", icon: DatabaseIcon },
-  { name: "Builds", icon: ClockIcon },
-];
+const AccountsData = dynamic(() => import("./accounts-data"));
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
+function Tabs({
+  tabs,
+  selectedBuild,
+  builds,
+  readme,
+  files,
+  networkIdl,
+  idlAddress,
+}: TabsProps) {
   const router = useRouter();
-  const { data: idl } = useSWR(selectedBuild.artifacts.idl as string, fetcher);
+  const { data: apiIdl } = useSWR(
+    selectedBuild && (selectedBuild.artifacts.idl as string),
+    fetcher
+  );
 
-  const selectedTab = router.query.tab || "Readme";
-  const idlHasAccount = idl && Array.isArray(idl.accounts) && idl.accounts.length > 0;
+  const idl = apiIdl || networkIdl;
+  const address = selectedBuild?.address || idlAddress;
+
+  let selectedTab = router.query.tab || "Readme";
+
+  if (router.pathname.includes("/idl/")) {
+    selectedTab = router.query.tab == "Accounts Data" ? "Accounts Data" : "IDL";
+  }
+
+  const idlHasAccount =
+    idl && Array.isArray(idl.accounts) && idl.accounts.length > 0;
 
   return (
     <div>
@@ -62,10 +68,18 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
               <button
                 key={tab.name}
                 onClick={() => {
-                  router.push(`/program/${router.query.address}?tab=${tab.name}`);
+                  let section = router.pathname.includes("/idl/")
+                    ? "idl"
+                    : "program";
+
+                  router.push(
+                    `/${section}/${router.query.address}?tab=${tab.name}`
+                  );
                 }}
                 disabled={
-                  (tab.name === "IDL" && !idl) || (tab.name === "Accounts Data" && !idlHasAccount)
+                  tab.disabled ||
+                  (tab.name === "IDL" && !idl) ||
+                  (tab.name === "Accounts Data" && !idlHasAccount)
                 }
                 className={classNames(
                   tab.name === selectedTab
@@ -80,6 +94,7 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
                     tab.name === selectedTab
                       ? "text-amber-500"
                       : "text-gray-400 group-hover:text-gray-500",
+                    tab.disabled && "text-gray-300 group-hover:text-gray-300",
                     (tab.name === "IDL" || tab.name === "Accounts Data") &&
                       !idl &&
                       "text-gray-300 group-hover:text-gray-300",
@@ -88,16 +103,6 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
                   aria-hidden="true"
                 />
                 <span>{tab.name}</span>
-                {tab.name === "Accounts Data" && (
-                  <span
-                    className={classNames(
-                      "ml-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800",
-                      !idl?.accounts && "opacity-50"
-                    )}
-                  >
-                    New
-                  </span>
-                )}
               </button>
             ))}
           </nav>
@@ -109,19 +114,24 @@ function Tabs({ selectedBuild, builds, readme, files }: TabsProps) {
       {selectedTab === "Explorer" && (
         <SourceFiles name={selectedBuild.name} files={files} readme={readme} />
       )}
-      {selectedTab === "IDL" && idl && <IdlViewer data={idl} url={selectedBuild.artifacts.idl} />}
+      {selectedTab === "IDL" && (idl || networkIdl) && (
+        <IdlViewer data={idl} url={selectedBuild?.artifacts?.idl} />
+      )}
       {selectedTab === "Accounts Data" && idl && idl.accounts && (
-        <AccountsData idl={idl} programID={selectedBuild.address} />
+        <AccountsData idl={idl} programID={address} />
       )}
     </div>
   );
 }
 
 interface TabsProps {
-  readme: string;
-  selectedBuild: any;
-  builds: any[];
-  files: string[];
+  readme: string | undefined;
+  selectedBuild: any | undefined;
+  builds: any[] | undefined;
+  files: string[] | undefined;
+  tabs: any[];
+  networkIdl: Idl | undefined;
+  idlAddress: Address | undefined;
 }
 
 export default memo(Tabs);

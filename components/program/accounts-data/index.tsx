@@ -21,7 +21,6 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
   // Initialize Anchor program
   const defineProgram = useCallback(async (): Promise<any> => {
     try {
-      // TODO: env var
       const connection = new Connection(
         process.env.NEXT_PUBLIC_NODE_URL as string
       );
@@ -35,10 +34,11 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
         },
         { commitment: "processed", skipPreflight: true }
       );
-
+      console.log(idl);
+      console.log(programID);
       return new Program(idl, programID, provider);
     } catch (e) {
-      console.error("Error:", e);
+      console.error("Error defining program:", e);
     }
   }, [idl, programID]);
 
@@ -88,7 +88,6 @@ function AccountsData({ idl, programID }: AccountsDataProps) {
 
         // normalize account name
         const name = accountName.charAt(0).toLowerCase() + accountName.slice(1);
-
         // Check if I need to find an specific account or all accounts
         if (filter.address) {
           const data = await program.account[name].fetch(filter.address);

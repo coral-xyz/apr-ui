@@ -1,6 +1,8 @@
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Combobox, Dialog, Transition } from "@headlessui/react";
 import { FilterIcon } from "@heroicons/react/solid";
+import { AnchorProvider, Program } from "@project-serum/anchor";
+import { Connection, PublicKey } from "@solana/web3.js";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -8,20 +10,76 @@ function classNames(...classes) {
 
 export default function Search({ programs, open, setOpen }: ProgramsProps) {
   const [query, setQuery] = useState("");
+  const [list, setList] = useState([]);
+  const [unpublishedProgram, setUnpublishedProgram] = useState(false);
 
-  const filteredPrograms =
-    query === ""
-      ? []
-      : programs.filter((program) => {
-          if (program.name.toLowerCase().includes(query.toLowerCase())) {
-            return true;
-          } else if (
-            program.address.toLowerCase().includes(query.toLowerCase())
-          ) {
-            return true;
+  const filteredPrograms = useMemo(async () => {
+    if (query === "") {
+      setList([]);
+    } else {
+      const data = programs.filter((program) => {
+        if (program.name.toLowerCase().includes(query.toLowerCase())) {
+          return true;
+        } else if (
+          program.address.toLowerCase().includes(query.toLowerCase())
+        ) {
+          return true;
+        }
+        return false;
+      });
+
+      setList(data);
+      setUnpublishedProgram(false);
+    }
+  }, [programs, query]);
+
+  const fetchIdl = useCallback(async (address: PublicKey): Promise<any> => {
+    try {
+      const connection = new Connection(
+        process.env.NEXT_PUBLIC_NODE_URL as string
+      );
+
+      const provider = new AnchorProvider(
+        connection,
+        {
+          publicKey: PublicKey.default,
+          signAllTransactions: undefined,
+          signTransaction: undefined,
+        },
+        { commitment: "processed", skipPreflight: true }
+      );
+
+      const idl = await Program.fetchIdl(address, provider);
+      return idl;
+    } catch (e) {
+      console.error("Error:", e);
+    }
+  }, []);
+
+  useEffect(() => {
+    {
+      async function run() {
+        try {
+          const key = new PublicKey(query);
+
+          // If real key, try fetching idl
+          if (PublicKey.isOnCurve(key.toBytes())) {
+            const idl = await fetchIdl(key);
+
+            if (idl) {
+              setList([{ address: query, name: idl.name, idl: idl, id: 1 }]);
+              setUnpublishedProgram(true);
+            }
           }
-          return false;
-        });
+        } catch (e) {
+          console.log("Error:", e);
+        }
+      }
+      if (list.length == 0 && query.length > 20) {
+        run();
+      }
+    }
+  }, [list.length, fetchIdl, query, filteredPrograms]);
 
   return (
     <Transition.Root
@@ -55,9 +113,13 @@ export default function Search({ programs, open, setOpen }: ProgramsProps) {
           >
             <Dialog.Panel className="mx-auto max-w-xl transform rounded-xl bg-white p-2 shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
               <Combobox
-                onChange={(program) =>
-                  (window.location = `/program/${program.address}`)
-                }
+                onChange={(program) => {
+                  if (unpublishedProgram) {
+                    return (window.location = `/idl/${program.address}`);
+                  }
+
+                  return (window.location = `/program/${program.address}`);
+                }}
               >
                 <Combobox.Input
                   className="w-full rounded-md border-0 bg-white px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
@@ -65,12 +127,12 @@ export default function Search({ programs, open, setOpen }: ProgramsProps) {
                   onChange={(event) => setQuery(event.target.value)}
                 />
 
-                {filteredPrograms.length > 0 && (
+                {list.length > 0 && (
                   <Combobox.Options
                     static
                     className="-mb-2 max-h-72 scroll-py-2 overflow-y-auto py-2 text-sm text-gray-800"
                   >
-                    {filteredPrograms.map((program) => (
+                    {list.map((program) => (
                       <Combobox.Option
                         key={program.id}
                         value={program}
@@ -94,7 +156,7 @@ export default function Search({ programs, open, setOpen }: ProgramsProps) {
                   </Combobox.Options>
                 )}
 
-                {query !== "" && filteredPrograms.length === 0 && (
+                {query !== "" && list.length === 0 && (
                   <div className="py-14 px-4 text-center sm:px-14">
                     <FilterIcon
                       className="mx-auto h-6 w-6 text-gray-400"

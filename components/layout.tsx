@@ -41,7 +41,7 @@ export default function Layout({ children, metaTags }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {children}
+      <div className="mx-auto max-w-7xl px-10">{children}</div>
     </>
   );
 }

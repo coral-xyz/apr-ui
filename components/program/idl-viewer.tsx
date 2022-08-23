@@ -49,11 +49,20 @@ function IdlViewer({ data, url }: IDLViewerProps) {
       <div className="hidden sm:block">
         <nav className="flex gap-2" aria-label="Tabs">
           {tabs.map((tab) => (
-            <div className={classNames(tab.name === "Raw" && "ml-auto mr-2")} key={tab.name}>
+            <div
+              className={classNames(tab.name === "Raw" && "ml-auto mr-2")}
+              key={tab.name}
+            >
               {tab.name !== "Raw" ? (
                 <button
                   onClick={() => {
-                    router.push(`/program/${router.query.address}?tab=IDL&idl=${tab.name}`);
+                    let section = router.pathname.includes("/idl/")
+                      ? "idl"
+                      : "program";
+
+                    router.push(
+                      `/${section}/${router.query.address}?tab=IDL&idl=${tab.name}`
+                    );
                   }}
                   disabled={!(tab.name.toLowerCase() in data)}
                   className={classNames(
@@ -67,26 +76,32 @@ function IdlViewer({ data, url }: IDLViewerProps) {
                   {tab.name}
                 </button>
               ) : (
-                <a
-                  className="flex gap-1 pt-2 pr-3 text-sm font-medium text-gray-500 hover:text-gray-700"
-                  href={url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <DownloadIcon className="h-5 w-5" />
-                  <span>{tab.name}</span>
-                </a>
+                url && (
+                  <a
+                    className="flex gap-1 pt-2 pr-3 text-sm font-medium text-gray-500 hover:text-gray-700"
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <DownloadIcon className="h-5 w-5" />
+                    <span>{tab.name}</span>
+                  </a>
+                )
               )}
             </div>
           ))}
         </nav>
       </div>
-      {selectedTab === "Instructions" && <Instructions data={data.instructions} />}
+      {selectedTab === "Instructions" && (
+        <Instructions data={data.instructions} />
+      )}
       {selectedTab === "Accounts" && <Accounts data={data.accounts} />}
       {data.errors && selectedTab === "Errors" && <Errors data={data.errors} />}
       {data.types && selectedTab === "Types" && <Types data={data.types} />}
       {data.events && selectedTab === "Events" && <Events data={data.events} />}
-      {data.events && selectedTab === "Constants" && <Constants data={data.constants} />}
+      {data.events && selectedTab === "Constants" && (
+        <Constants data={data.constants} />
+      )}
     </div>
   );
 }

@@ -36,9 +36,18 @@ function ProgramCard({
 
             {/* Tags */}
             <div className="flex flex-row gap-2">
-              <span className="rounded-lg bg-orange-100  px-2 py-1 text-sm font-medium tracking-wide text-gray-500">
-                build #{selectedBuild.id}
-              </span>
+              {selectedBuild ? (
+                <span className="rounded-lg bg-orange-100  px-2 py-1 text-sm font-medium tracking-wide text-gray-500">
+                  build #{selectedBuild.id}
+                </span>
+              ) : (
+                <>
+                  <span className="rounded-lg bg-orange-100  px-2 py-1 text-sm font-medium tracking-wide text-gray-500">
+                    mainnet-beta
+                  </span>
+                </>
+              )}
+
               {latest && (
                 <span className="rounded-lg bg-orange-100 px-2 py-1 text-sm font-medium tracking-wide text-gray-500">
                   latest
@@ -48,66 +57,70 @@ function ProgramCard({
           </div>
         </div>
 
-        <div className="relative">
-          <div
-            className="absolute inset-0 flex items-center"
-            aria-hidden="true"
-          >
-            <div className="w-full border-t border-gray-200" />
-          </div>
-        </div>
-
-        <div className="flex flex-col justify-between gap-6 pr-4 lg:flex-row">
-          {/* Verification Status */}
-          <div className="flex flex-col gap-2">
-            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
-              Status
-            </h5>
-            <Status buildStatus={selectedBuild.buildStatus} />
-          </div>
-
-          {/* Last Updated */}
-          <div className="flex flex-col gap-2">
-            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
-              Last Updated
-            </h5>
-            <h5 className="font-medium tracking-wide text-gray-700">
-              {FormatDate(selectedBuild.updated_at)}
-            </h5>
-          </div>
-
-          {/* Build */}
-          <div className="flex flex-col gap-2">
-            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
-              Build
-            </h5>
-            <div className="flex flex-row gap-1 text-sky-500">
-              <CloudDownloadOutlined />
-              <a
-                className="max-w-xs truncate font-medium text-sky-500"
-                href={selectedBuild.artifacts.tarball}
+        {selectedBuild && (
+          <>
+            <div className="relative">
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
               >
-                {selectedBuild.sha256}
-              </a>
+                <div className="w-full border-t border-gray-200" />
+              </div>
             </div>
-          </div>
 
-          {/* Artifact */}
-          <div className="flex flex-col gap-2">
-            <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
-              Artifact
-            </h5>
-            <div className="flex flex-row gap-1 text-sky-500">
-              <CloudDownloadOutlined />
-              <a
-                className="font-medium text-sky-500"
-                href={selectedBuild.artifacts.binary}
-              >
-                {selectedBuild.name}.so
-              </a>
+            <div className="flex flex-col justify-between gap-6 pr-4 lg:flex-row">
+              {/* Verification Status */}
+              <div className="flex flex-col gap-2">
+                <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
+                  Status
+                </h5>
+                <Status buildStatus={selectedBuild.buildStatus} />
+              </div>
+
+              {/* Last Updated */}
+              <div className="flex flex-col gap-2">
+                <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
+                  Last Updated
+                </h5>
+                <h5 className="font-medium tracking-wide text-gray-700">
+                  {FormatDate(selectedBuild.updated_at)}
+                </h5>
+              </div>
+
+              {/* Build */}
+              <div className="flex flex-col gap-2">
+                <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
+                  Build
+                </h5>
+                <div className="flex flex-row gap-1 text-sky-500">
+                  <CloudDownloadOutlined />
+                  <a
+                    className="max-w-xs truncate font-medium text-sky-500"
+                    href={selectedBuild.artifacts?.tarball}
+                  >
+                    {selectedBuild.sha256}
+                  </a>
+                </div>
+              </div>
+
+              {/* Artifact */}
+              <div className="flex flex-col gap-2">
+                <h5 className="text-xs font-bold uppercase tracking-wide text-gray-500">
+                  Artifact
+                </h5>
+                <div className="flex flex-row gap-1 text-sky-500">
+                  <CloudDownloadOutlined />
+                  <a
+                    className="font-medium text-sky-500"
+                    href={selectedBuild.artifacts?.binary}
+                  >
+                    {selectedBuild.name}.so
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </>
   );
@@ -116,7 +129,7 @@ function ProgramCard({
 interface ProgramCardProps {
   name: string;
   address: string;
-  selectedBuild: any;
+  selectedBuild: any | boolean;
   latest: boolean;
 }
 
