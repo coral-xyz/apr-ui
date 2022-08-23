@@ -14,7 +14,7 @@ function Program({
   const latestBuild = selectedBuild.id === builds[0].id;
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 px-5">
       <ProgramBanner
         name={program.name}
         address={program.address}
