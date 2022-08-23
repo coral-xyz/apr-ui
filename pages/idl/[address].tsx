@@ -24,14 +24,7 @@ const tabs = [
 
 export async function getStaticPaths() {
   return {
-    paths: [
-      {
-        params: {
-          address: "JUP2jxvXaqu7NQY1GmNF4m1vodw12LVXYxbFL2uJvfo",
-        },
-      },
-    ],
-
+    paths: [],
     fallback: "blocking",
   };
 }
