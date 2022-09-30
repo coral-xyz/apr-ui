@@ -11,6 +11,7 @@ import {
   SearchIcon,
   XIcon,
 } from "@heroicons/react/outline";
+import { GlobalHotKeys } from "react-hotkeys";
 import Image from "next/image";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
@@ -39,6 +40,14 @@ function Nav() {
   const { data: session, status } = useSession();
   const { wallet, publicKey, signMessage, connected } = useWallet();
   const { setVisible } = useWalletModal();
+
+  const keyMap = {
+    SEARCH: "command+k",
+  };
+
+  const handlers = {
+    SEARCH: () => setShowSearch(true),
+  };
 
   useEffect(() => {
     async function login() {
@@ -91,30 +100,32 @@ function Nav() {
 
                 {/* Search */}
                 {pathname !== "/" && (
-                  <div className="hidden justify-center gap-2 lg:flex">
-                    <div className="relative w-96">
-                      <button
-                        onClick={() => setShowSearch(true)}
-                        className="shadow-xs flex h-12 w-full cursor-text items-center
+                  <GlobalHotKeys keyMap={keyMap} handlers={handlers}>
+                    <div className="hidden justify-center gap-2 lg:flex">
+                      <div className="relative w-96">
+                        <button
+                          onClick={() => setShowSearch(true)}
+                          className="shadow-xs flex h-12 w-full cursor-text items-center
                 justify-between rounded-md border border-gray-700 bg-gray-700 px-5  shadow focus:outline-none"
-                      >
-                        <div className="flex flex-row items-center gap-2 text-gray-500">
-                          <SearchIcon
-                            className="h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          <span className="text-gray-400">
-                            Search by name or address
-                          </span>
-                        </div>
-                        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
-                          <kbd className="inline-flex items-center rounded border border-gray-500 px-2 font-sans text-sm font-medium text-gray-400">
-                            ⌘K
-                          </kbd>
-                        </div>
-                      </button>
+                        >
+                          <div className="flex flex-row items-center gap-2 text-gray-500">
+                            <SearchIcon
+                              className="h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                            <span className="text-gray-400">
+                              Search by name or address
+                            </span>
+                          </div>
+                          <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+                            <kbd className="inline-flex items-center rounded border border-gray-500 px-2 font-sans text-sm font-medium text-gray-400">
+                              ⌘K
+                            </kbd>
+                          </div>
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  </GlobalHotKeys>
                 )}
 
                 {/* Actions */}

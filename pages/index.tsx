@@ -5,6 +5,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import Layout from "../components/layout";
 import { SearchIcon } from "@heroicons/react/outline";
+import { GlobalHotKeys } from "react-hotkeys";
 
 const Search = dynamic(() => import("../components/search"));
 const ProgramMiniCard = dynamic(
@@ -80,6 +81,14 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
   const [newProgramsSize, setNewProgramsSize] = useState(10);
   const [justUpdatedSize, setJustUpdatedSize] = useState(10);
 
+  const keyMap = {
+    SEARCH: "command+k",
+  };
+
+  const handlers = {
+    SEARCH: () => setOpen(true),
+  };
+
   const metaTags = {
     title: "apr",
     description: "Anchor Programs Registry",
@@ -113,9 +122,11 @@ export default function Home({ justUpdated, newPrograms }: HomeProps) {
                   <SearchIcon className="h-5 w-5" />
                   <span className="">Search by name or address</span>
                 </div>
-                <kbd className="inline-flex items-center rounded border border-gray-200 px-2 font-sans text-sm font-medium text-gray-500">
-                  ⌘K
-                </kbd>
+                <GlobalHotKeys keyMap={keyMap} handlers={handlers}>
+                  <kbd className="inline-flex items-center rounded border border-gray-200 px-2 font-sans text-sm font-medium text-gray-500">
+                    ⌘K
+                  </kbd>
+                </GlobalHotKeys>
               </button>
             </div>
           </div>
