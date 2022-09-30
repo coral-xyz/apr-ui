@@ -21,14 +21,16 @@
 
 1. Install dependencies
 2. `cp .env.example .env.local`
-3. yarn dev
-4. open browser `http://localhost:3000`
+3. Change `NEXT_PUBLIC_API_ENDPOINT` value (ex. `https://api.apr.dev`)
+4. yarn dev
+5. open browser `http://localhost:3000`
 
 ### `NEXT_PUBLIC_API_ENDPOINT` env var
 
 Ask @italoacasas or @armaniferrante in Discord or Twitter.
 
 ## TailwindCSS & Material UI
+
 All new components should use TailwindCSS and not Material UI. The goal is to remove Material UI from the project.
 
 ## APR API
